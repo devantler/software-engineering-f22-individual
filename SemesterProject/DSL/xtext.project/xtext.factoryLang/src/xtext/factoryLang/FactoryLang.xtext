@@ -3,7 +3,7 @@ grammar xtext.factoryLang.FactoryLang with org.eclipse.xtext.common.Terminals
 generate factoryLang "http://www.factoryLang.xtext/FactoryLang"
 
 Model:
-	configurations+=Configuration+ statements+=Statement+;
+	configurations+=Configuration+ statements+=Statement+ unitTests+=UnitTest+ uppaalQueries+=UppaalQuery+;
 
 // ----- CONFIGURATION ----- //
 Configuration:
@@ -116,6 +116,14 @@ ForEach returns Loop:
 	{ForEach} 'for' 'each' variable=LocalVariable 'in' device=[Device] 'that' 'is' (operator='not')?
 	variableValue=VariableValue
 	'then' BEGIN statements+=Statement* END;
+
+// ----- UnitTests ----- //
+
+// Add UnitTests
+
+// ----- UppaalQueries ----- //
+
+// Add UppaalQueries
 
 // ----- VARIABLES ----- //
 LocalVariable returns Variable:
