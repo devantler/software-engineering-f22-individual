@@ -1,0 +1,15 @@
+\section{Identified properties}\label{sec:identified_properties}
+
+There is a lack of requirements considering system performance. Therefore, a sub-performance section could be added that handles verification rules on a smaller scale instead of the present grand scale. Two possible requirements for the sub-performance verification could be:
+
+\begin{itemize}
+    \item Is torque changed within $x$ amount of time after a request?
+    \item Is speed changed within $x$ amount of time after a request?
+\end{itemize}
+\vspace{1em}
+
+Furthermore, an additional requirement could be to verify that the system cannot end up in an irrecoverable state. This would look as follows:
+
+\begin{itemize}
+    \item $A[] \text{ deadlock imply } (\text{ErrStat} > 0)$
+\end{itemize}

@@ -1,0 +1,45 @@
+\subsection{Solution Approach}
+
+The system in its entirety is a prototype of an autonomous assembly line. It simulates a large-scale assembly line in storage facilities where safety is critical. The system consists of three different devices: cranes, disks and cameras. There is no limit to the number of each device type.
+\\
+
+The responsibility of the disks is to store items in a facility. The disks have a set of slots to contain the items and several zones that correspond to input, output, and processing locations in a large-scale assembly line. Three zones will be created at a minimum; that is one for crane operations, camera scanning and incoming items on the assembly line.
+
+The responsibility of the crane is to move items from a disk to storage containers matching the item type.
+
+Cameras scan the colours of the items located on the disks. The colours are used to simulate item types, and as such the cranes use the information to decide which storage container to put items into.
+
+A full overview of the system and how the physical devices are controlled remotely by software is presented in \refappendix{appendix:system-overview}.
+
+\subsubsection{Domain-Specific Language}\label{sec:sa-dsl}
+\hfill
+% purpose of the language: simple and human-readable
+% example on configuration
+% external vs. internal dsl
+
+A domain-specific language has to be developed to make programs for the assembly line. These programs should be simple and easy to write for a non-programmer. This is essentially the point of a \acrshort{dsl}, but this language has been decided to be a natural language to make it look more like the English language. An external \acrshort{dsl} should be implemented as opposed to an internal \acrshort{dsl} to make the language fully configurable to fit an assembly line.\\
+
+The \acrshort{dsl} should be able to configure all three devices. Within the configuration, a name should be specified for each device, as it is possible to have multiple objects for each device. Furthermore, each device has additional configurations. The crane should have positions defined for locations it can move to, e.g. positions at the disk and the storage containers. The disk will need a predefined number of slots, and the number of zones to specify where the physical locations of the other devices are. At last, the camera will need a configuration to define which colours it will be able to scan.\\
+
+The \acrshort{dsl} should also support defining the logic of the program. This logic instructs what the devices should do in different situations. An example of both configuration and logic is shown in \refappendix{appendix:fl}.\\
+
+Having a DSL allows for the fast and easy deployment of an assembly line. The workers, which are installing the setup, require little technical knowledge and only need to know how the DSL works. However, due to the simplicity of the DSL, it is also quite limited in functionality. Expanding functionality requires either mixing the DSL with manual implementations or expanding the DSL itself. The first option makes for a complicated working process that will most likely result in high amounts of technical debt. The second option is a time-consuming task. 
+
+\newpage
+\subsubsection{Networking, Communication between Devices, and Logging}\hfill
+\paragraph{Networking -}
+For the project, an isolated network is used. It is isolated in the sense that the network exists behind a \acrshort{nat}. This shields the devices from direct interaction with outside connections. Isolating them on their own wireless \acrshort{ap}'s also serves to increase the communication stability, as dysfunctional devices can make the communication to an \acrshort{ap} very unstable.
+\paragraph{MQTT -}
+Communication across the system is done through \acrshort{mqtt}. \acrshort{mqtt} is a publish-subscribe system that facilitates communication via topics. Topics in \acrshort{mqtt} are text strings that describe where messages are sent to. \acrshort{mqtt} topics allow for only one message at a time but can be set to retain the last message such that any client who connects after the message has been sent are able to view the message. The topics in \acrshort{mqtt} are normally structured by forward-slashes to signify association, and an example of this could be \code{/log/camera1/error}. In this example we see a base level of \code{log}; this name in our solution signifies an association with logging for any lower topics. We then reference \code{camera1} which likewise signifies association with the camera. We can also use wildcards to reference these topics, such as using a wildcard instead of the \code{camera1}. This would allow gathering all errors which are referenced by \code{/log/[devicename]/error}.
+\paragraph{Logging -}
+Logging is currently done by the devices publishing logs to \acrshort{mqtt} topics depending on the severity of the data. These topics are structured such that the last part of the \acrshort{mqtt} topic corresponds to the severity, for example, \code{/log/camera1/error}. Additionally, to facilitate dynamic logging levels, the devices subscribe to a \code{SetLoggingLevel} command, which controls what information the device will log to the \acrshort{mqtt} broker.
+To collect the logs from the \acrshort{mqtt} broker and store them in a database, a custom Python application is used. This application subscribes to all logging topics, and whenever a message is published, sends it to the influxdb database, which stores the logs. To visualize the logs, Grafana is used by connecting it directly to the InfluxDB database and creating panels that show errors over time and other such information. Such a graph can be seen in \refappendix{appendix:log-graph}.
+
+\subsubsection{The UPPAAL-Model} \label{section:uppaal-model}
+\hfill
+
+The DSL is used to generate a UPPAAL model. This UPPAAL model is used to verify certain requirements, which have been deemed suitable for any configuration of the system. This ensures that the configuration and factory logic implemented by a user can be verified for basic safety and reliability issues. The requirements of the model can be seen in \refappendix{appendix:functional-requirements}. However, some requirements will not be verified. These are: 1.b, 1.c, 1.d, 1.e, 1.i, 1.j, 2.e, 2.f, 2.j, 2.k, 3.c and 3.d. These will be omitted due to scoping. \\
+
+UPPAAL can then be used to verify the combined model of the generated templates. This is done by also generating queries that match the generated model. These queries try to match the requirements so that it can be verified that the requirements are true for the implemented system.
+
+This approach means that any implementation of the DSL can easily be verified to fulfil the listed requirements. However, as the UPPAAL model is generated, it quickly becomes so big that verifying the properties is computationally heavy and takes a long time. Creating one model means that all states have to be evaluated at once.

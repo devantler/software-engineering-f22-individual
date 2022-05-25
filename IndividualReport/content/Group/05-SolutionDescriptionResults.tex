@@ -1,0 +1,100 @@
+\subsection{Solution Description and Results}
+
+\subsubsection{Implementation Prototype}\hfill\\
+The system is designed to support any number of devices, which are programmed with the DSL. To test the system, a prototype implementation was used throughout the project. 
+
+The prototype implementation uses one of each device to match the scope of the project and to ensure a minimal viable product is feasible in the project time frame.
+\\
+
+The setup is shown in \refappendix{appendix:system-overview}. Here it can be seen how the orchestrator, running on a Raspberry Pi, communicates with the different devices through an \acrshort{mqtt} broker. A program also listens for any messages on logging topics and saves them in a database.
+
+This is all based on an example implementation of our DSL, which can be seen in \refappendix{appendix:fl}, and it is also the implementation that controls the program flow in the video attached to the paper. The function of this implementation is to scan incoming items, and then let them dry based on their colour. When they are done drying, they are picked up by the crane and placed in the right box, which fits with the item's colour. 
+
+\subsubsection{Factory Language (.fl)}\hfill
+
+The \acrshort{dsl} created according to section \ref{sec:sa-dsl} is implemented with a focus on readability, usability and on providing a flexible and extensible metamodel. The grammar consists of 39 parser rules, 5 enums, and 2 terminals. Furthermore, the grammar relies a lot on the \code{returns} keyword to design a hierarchy for different parser rules and ultimately the metamodel. \autoref{fig:metamodel} in \refappendix{appendix:metamodel} gives an overview of the metamodel parsed by the grammar language.\\
+
+The root parser rule, \code{Model}, contains one or more configurations and statements, where the configuration parser rules parse text blocks that define devices and device properties. The statement parser rules parse text blocks that define the logic of the final system.\\
+
+Configurations support different device properties e.g. configurable slot count, disk zones, crane positions and scannable colours for a specific camera. All these device properties are referable by the statements, such that the logic can operate on the provided properties.\\
+
+There are three different types of statements - conditionals, loops, and operations. Conditionals can parse if-statements with various conditions and operands, to support basic program flows. Loops can parse for-each statements that allow program flows where statements must be repeated while a condition is not satisfied. Operations define different instructions that the different devices can execute, e.g. \code{DiskMoveSlotOperation} which commands the disk to move a slot to a specific zone. The operations are split into hierarchies of \code{DiskOperation}, \code{CraneOperation}, and \code{CameraOperation}, such that each operation type can be extended with new commands as required.\\
+
+Factory Language has a set of validation and scoping rules. The validation rules ensure that only valid input is allowed. This is very helpful to the user because Factory Language uses natural language for its grammar, and this means that there are some inconsistencies in operations and statements to ensure grammatically correct expressions. A couple of examples for validation rules are listed below:
+
+\begin{itemize}
+    \item Crane positions must be between 0 and 359 degrees as these are the lower and upper limits of angles.
+    \item A disk cannot have more zones than available slots.
+    \item Drying time for items must be equal to or larger than 1 second.
+\end{itemize}
+
+Scoping rules were necessary to enable device properties to be usable by statements. As such, scoping has been implemented for all variables and references.
+
+Lastly, Factory Language is implemented to be whitespace aware, where nested elements must be indented. This provides a better reading experience, and because validation errors tell the end-user it is required should make it obvious if indentation is new to the user. Indentation is implemented with the terminals: \texttt{synthesize BEGIN} and \texttt{synthesize END}. The terminals tell the parser when indentation is required, and using \texttt{synthesize} with terminals is recommended by Xtext documentation \cite{xtext-language-configurations}.\\
+
+The grammar language results in the Factory Language (.fl). An example is shown in \refappendix{appendix:factory-lang}.
+
+\subsubsection{Generated Artifacts}\hfill
+
+From the Xtext project, two distinct artefacts are generated - (1) an orchestrator, and (2) a UPPAAL project. 
+
+\paragraph{The Generated Orchestrator -}
+
+The orchestrator is a C\# service that translates the Factory Language into an executable program, which functions as a main controller for the assembly line.
+
+The orchestrator consists of the following generated files and folders:
+
+\begin{itemize}
+    \item A \code{Program.cs} class.
+    \item An \code{Mqtt} folder with an \code{MqttService} and \code{MqttTopics}.
+    \item An \code{Entities} folder with classes representing the programmable devices in the assembly line.
+    \item A \code{Dockerfile}.
+\end{itemize}
+
+The \code{Program.cs} class is the entry point for the application, and it is also this class that defines the main loop that continuously executes code equivalent to a given program flow defined by a Factory Language's set of statements.
+
+The \code{MqttService} class includes everything needed to send and receive messages from the \acrshort{mqtt} broker. The service is injected in nearly all entity classes, as well as being initialized and used in the \code{Program.cs} class.
+
+The entity classes consists of:
+\begin{itemize}
+    \item \code{Camera.cs}
+    \item \code{Crane.cs}
+    \item \code{Disk.cs}
+    \item \code{Slot.cs}
+    \item \code{SlotState.cs}
+\end{itemize}
+
+Each of the entity classes has methods corresponding to the different operations that they provide, e.g.:
+
+\begin{minted}[breaklines]{csharp}
+public async Task MoveSlot(int fromZone, int toZone)
+\end{minted}
+
+The \code{MoveSlot} method moves a slot from one zone to another, but it also demonstrates how many of the operation methods are asynchronous and utilizes tasks, such that operations can await each other, or run in parallel where possible.
+
+The generated \code{Dockerfile} is part of a continuous integration workflow, where a GitHub Action poll for changes in the Orchestrator service, and if any changes are applied, a Docker image is built and pushed to a GitHub Container Registry. From there the latest image can be pulled to the Raspberry Pi for easy deployment of the assembly line.
+
+\paragraph{The Generated UPPAAL Project -}
+The generated model creates different templates depending on the configuration defined in the DSL. A master controller template is always created, which reflects the statements part of the DSL. Each device specified in the configuration of the DSL also results in one or more templates. A crane is represented by two templates;
+\begin{itemize}
+    \item Crane template: This template reflects the position of the crane's arm and whether the magnet is raised or lowered.
+    \item Crane Magnet template: This template only shows the state of the magnet.
+\end{itemize}
+\vspace{1em}
+A disk is the most complicated entity to model and is represented by nine templates. However, several of these templates are identical in functionality as they only deal with different variables. This means that in reality there are four different templates created for a disk;
+\begin{itemize}
+    \item Disk template: This template represents how the disk is currently positioned. It is also responsible for communicating that an item has been added or removed to the correct slot. The master controller only requests adding or removing an item and not where to put it.
+    \item Disk Slot template: This template represents a disk slot on the disk. It is therefore copied per slot defined in the DSL. The disk slot keeps track of if the slot has an item and what colour if any, the item has.
+    \item Disk Get Empty / Complete / Free / In-progress Slot template: These templates are used by the master controller to get a slot that is in the specified state. 
+    \item Disk Slot Variable - Complete / Free / In-Progress template: These templates are used to toggle the specified state of a disk slot.
+\end{itemize}
+\vspace{1em}
+Finally, a camera is only a single template that chooses a random colour, when asked to scan. 
+
+\subsubsection{IoT setup}
+
+\paragraph{Networking -}
+The networking that the system requires is while simple, a very critical part of the system. For the communication between the devices and the orchestrator, a network is needed. The ESP32 devices that are to control the crane and the storage, require that the network conforms to the Wi-Fi standards IEEE 802.11b/g/n\cite{802.11} on a 2.4 GHz band. To achieve this, a \acrlong{pi} (\acrshort{pi}) is acting as the access point. It has been set up to use its RJ45 Ethernet connector as a \acrshort{wan} port to allow the system to be connected to any network. It provides \acrshort{nat} functionality on the \acrshort{wlan} to facilitate that the connection happens without directly exposing the \acrshort{iiot} devices to the rest of the network that they are connected to.\hfill
+
+\paragraph{The Physical Setup -} The setup itself is well defined by the diagram seen in Figure \ref{fig:system-overview}. It is in theory composed of three \acrshort{iiot} devices. The crane, the storage disk, and the camera colour scanner. These devices would then be connected up to a dedicated network, and the services such as the orchestrator and database would be hosted on one or more servers. In practice, the system has two standalone devices in the crane and disk. The scanner, \acrshort{ap} and service hosting are then handled by the \acrshort{pi}. Optimally, these services should be deployed to different physical devices to remove the single point of failure. However, here it serves as a proof of concept.
+\paragraph{} With the programming of the devices shortcuts were taken. For the ESP32's code, the Arduino framework was used. This was done to lower complexity and shorten the prototyping time. The Arduino framework offers a lot of simplifications, for things like writing to i/o pins. It also allows the use of libraries for common peripherals such as stepper motors. Nonetheless, using the framework locks down what can be done such as the multi-threading offered by FreeRTOS. It also hampers the performance of the programs, as much of it is poorly optimized for space and speed.

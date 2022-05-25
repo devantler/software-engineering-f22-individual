@@ -1,0 +1,28 @@
+\section{Introduction}
+
+The UPPAAL model developed is based on the information in the appendix of \citetitle{gearcontrol}\cite{gearcontrol}. The appendix provides five timed automata diagrams: interface, gearbox, gear control, clutch, and engine. \\
+The group created five templates in UPPAAL that correspond to the five diagrams in the appendix. The templates rely heavily on UPPAAL features. \\
+First off, the UPPAAL system developed is a timed automaton, and as such, it relies on clocks for its various timers. \\
+For modeling the states, the group relied on locations, committed locations, and invariants. Locations are the base states, and committed locations are particular states that freeze time and require an outgoing edge. Invariants were necessary as conditions for when to enter/exit a location, as all processes relied on clocks. \\
+For the edges, the group used guards, updates, and syncs. Guards are conditions that ensure expected variable values before transitioning over an edge. Updates are used to change values of variables, e.g., timers. Syncs are used to synchronize channels between processes (each template describes a process during simulation) by setting synchronization labels that define the synchronization state, e.g.:
+
+\begin{itemize}
+    \item 'channelName!' means the channel is getting executed
+    \item 'channelName?' means the channels is done executing
+\end{itemize}
+
+Using the synchronization labels across templates allowed us to model the system's flow as it spans across different processes. \\
+
+Furthermore, the appendix also defines 47 verification rules that have all been added to the verifier in UPPAAL. Each rule is described with a comment in the verifier's comment field to make it easier to understand and maintain. \\ 
+A verification rule in UPPAAL is written using a built-in query language that covers most timed automata scenarios. In short, the query language consists of five syntaxes:
+
+\begin{itemize}
+    \item $E[]$ implies that all locations on a path have x state
+    \item $E<>$ implies that some locations on a path have x state
+    \item $A[]$ implies that all locations on all paths have x state
+    \item $A<>$ implies that some locations on all paths have x state
+    \item $p\rightarrow q$ implies that $p$ leads to $q$ at a later point in time
+\end{itemize}
+
+Lastly, the group added colors to locations to make committed locations, dead locations, and start locations more visible.
+\cite{uppaal}

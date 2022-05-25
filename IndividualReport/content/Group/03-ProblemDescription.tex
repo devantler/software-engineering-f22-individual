@@ -1,0 +1,25 @@
+\subsection{Problem Description}
+
+The problem description describes the problem in more detail by formulating the background of the problem and a proposed solution.
+
+\subsubsection{Background of the Problem}\hfill
+
+During the industrial growth as part of industry 3.0, automated production became commonplace. Production lines that operated automatically from computer programs, revolutionized the industry, allowing for autonomous processes e.g. production lines. Manufacturing large quantities of products like furniture, electronics or food became even more accessible. \cite{industrial-revolutions}
+
+However, the introduction of autonomous robots did not come without a cost. Autonomous assembly lines are for example still required to run near personnel, and in some cases, they must be operated and configured by said personnel. This requires such installations to be safe, e.g. limiting interaction, responding safely to external impediments, and operating reliably. As the world is now moving to industry 4.0, it makes everything even more complex, as interconnectivity and more autonomy put even more emphasis on reliability and safety. \cite[ch. 6]{se-robotics}
+
+The added autonomy to assembly lines will require a new level of trustworthiness, as technology shifts often do. How can personnel be confident that the installations around them will not be dysfunctional if e.g. a camera sensor dies? Industry 4.0 systems with many moving parts are more complex, and the risk for failure is increased. In case of connectivity issues or dysfunctional devices, systems must be able to adjust behaviour accordingly. \cite[ch. 5]{se-robotics}\\
+
+Without the inclusion of these subjects, it would be hard to create a re-configurable, reliable and safe assembly line running on industry 4.0 technology.
+
+\subsubsection{Proposed Solution}\hfill
+
+The proposed solution to the problem is divided into separate entities that include the three courses, as described below:
+
+\begin{itemize}
+    \item The devices within the assembly line will be actuated and controlled by different \acrshort{iot}-devices, such as an ESP32 to ensure physical connection for the hardware equipment, but also a WiFi connection to ensure remote control by \acrshort{mqtt}-topics.
+    \item An external DSL will be created to ensure a simple and human-readable programming interface to set up the devices and create the logic of the system.
+    \item An implementation of the DSL will be code-generated in C\# to work with \acrshort{mqtt}.
+    \item From the implementation of the DSL, a UPPAAL-model will be code-generated as well.
+    \item Queries will be created to verify the functional requirements defined to ensure a safe and reliable system.
+\end{itemize}

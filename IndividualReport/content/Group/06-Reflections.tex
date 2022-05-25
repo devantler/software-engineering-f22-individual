@@ -1,0 +1,40 @@
+\subsection{Discussion}
+
+The final system has been evaluated on whether it satisfies the requirements defined for model-checking (see \refappendix{appendix:requirements}) and if it satisfies the course objectives (see \refappendix{appendix:course-objectives}).
+
+\paragraph{D.1.1.* -} The functional requirements for the disk are satisfied by making it possible for the disk to rotate, occupy slots, and rotate slots to positions.
+
+\paragraph{D.1.2.* -} The functional requirements for the crane are satisfied by making the crane able to rotate, pick up, drop, and carry around items without dropping them prematurely.
+
+\paragraph{D.1.3.* -} The camera can scan the colours of items, and publish the colours to \acrshort{mqtt}.
+
+\paragraph{D.1.1.f, D.1.1.g, D.1.2.g, D.1.2.h -}
+The stop function requirements are satisfied by having a working emergency stop function on the crane and disk. The stop function is not able to resume operations without a full reboot, as such, it does not satisfy D.1.1.h and D.1.2.i.
+
+\paragraph{D.1.1.i, D.1.1.j, D.1.2.j, D.1.2.k, D.1.3.c, D.1.3.d -} The connectivity requirements are satisfied by using ESP32s and a RaspberryPi 4B as microcontrollers, as they have a WiFi module and support \acrshort{mqtt}. Furthermore, remote control is enabled by the code-generated orchestrator utilizing \acrshort{mqtt} and WiFi connectivity to the \acrshort{iot} devices. 
+
+\paragraph{\ref{appendix:knowledge}, and \ref{appendix:competences} -} The learning objectives are satisfied, as topis from \acrshort{msd}, \acrshort{ssav}, and \acrshort{sm-iot} are used extensively to both build the system and to describe the system.
+
+\paragraph{\ref{appendix:skills} -} Functional and non-functional requirements have been defined for the system in \refappendix{appendix:requirements}, and the system has been built, tested and evaluated with these requirements in mind.\\
+
+The state of the system is demonstrated in the video demo attached to the hand-in of this paper. It demonstrates the system's success, but also its weaknesses.\\
+
+As the system does not take physical space and its surroundings into account when determining where it is concerning the disk, the system had some precision error, as the disk and crane had to be positioned and placed correctly to perform as expected. Improving the precision would require rebuilding parts of the crane or disk. It could for example require that the crane and disk were mounted together, making the crane arm extensible to adjust for precision, or replacing wires to the electromagnet with softer ones that do not affect the position. As the precision of the hardware was not critical for the project's objective, rebuilding the system to fix it was not a priority, and in the demo, the precision error is corrected by pushing the electromagnet a little bit when necessary.\\
+
+In particular, three requirements were not satisfied. A resume function after an emergency stop was implemented for neither the disk nor the crane; likewise, it was not made possible for the camera to retry scanning if it fails.
+Due to time constraints, it was not feasible to implement the resume function, and as such requirements D.1.1.h and D.1.2.i were not satisfied. The need for a retry scanning function for the camera never occurred, so requirement D.1.3.b was not prioritized. In reality, these requirements are important for a real assembly line, as any failure can have huge costs for a production facility, and making sure a system can gracefully fail, and later resume is important to minimize maintenance.
+
+In summary, the final system has a couple of advantages and disadvantages:
+
+\begin{itemize}
+    \item [$+$] System is highly configurable and flexible.
+    \item [$+$] Configuring devices and creating a program flow have very low complexity.
+    \item [$+$] Auto code-generating UPPAAL projects with a basis in a real system are possible (with fixed queries).
+    \item [$+$] System is operational.
+    \item [$-$] Physical system is imprecise.
+    \item [$-$] UPPAAL queries are not dynamically defined in the \acrshort{dsl}.
+    \item [$-$] UPPAAL model checking is computationally heavy.
+    \item [$-$] \acrshort{iot} setup is not supported in the \acrshort{dsl}.
+    \item [$-$] Expanding or modifying the system is a large task, as the entire flow from \acrshort{dsl} to generated code has to be implemented.
+\end{itemize}
+

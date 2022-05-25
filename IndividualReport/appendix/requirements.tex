@@ -1,0 +1,68 @@
+\section{Functional and non-functional requirements}\label{appendix:requirements}
+
+\subsection{Functional requirements}\label{appendix:functional-requirements}
+\begin{enumerate}
+    \item Functional requirements for the disk.
+    \begin{enumerate}
+        \item The disk must be able to rotate items from one location to another.
+        \item The disk must be able to rotate the shortest path.
+        \item The disk must be able to avoid tangling wires while rotating.
+        \item The disk must have configurable slots for items.
+        \item The disk must have configurable zones for operations, e.g., scanning, crane pick up, intake.
+        \item The disk must have a stop function that conforms to danish machine safety standards.
+        \item The disk's stop function must halt all movement if the system is in an unsafe state.
+        \item The disk's stop function must be able to resume operations when the unsafe condition is resolved.
+        \item The disk must have WiFi connectivity.
+        \item The disk must be controllable with MQTT.
+    \end{enumerate}
+    \vspace{1em}
+    
+    \item Functional requirements for the crane.
+    \begin{enumerate}
+        \item The crane must be able to rotate its jib from one location to another.
+        \item The crane must be able to raise and lower with its hoist.
+        \item The crane must be able to pick up and deliver items.
+        \item The crane is not allowed to drop items before it reaches its target location.
+        \item The crane must be able to rotate the shortest path.
+        \item The crane must be able to avoid tangling wires while rotating.
+        \item The crane must have a stop function that conforms to danish machine safety standards.
+        \item The crane's stop function must halt all movement if the system is in an unsafe state.
+        \item The crane's stop function must be able to resume operations when the unsafe condition is resolved.
+        \item The crane must have WiFi connectivity.
+        \item The crane must be controllable with MQTT.
+    \end{enumerate}
+    \vspace{1em}
+
+
+    \item Functional requirements for the camera.
+    \begin{enumerate}
+        \item The camera must be able scan colors of items.
+        \item The camera must be able to retry scanning if it fails.
+        \item The camera must have WiFi connectivity.
+        \item The camera must be controllable with MQTT.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Non-functional requirements}
+
+\begin{enumerate}
+    \item Non-functional requirements for the disk.
+    \begin{enumerate}
+        \item The disk must operate reliably.
+        \item The disk must operate safely and not cause harm to people.
+    \end{enumerate}
+    \vspace{1em}
+    
+    \item Non-functional requirements for the crane.
+    \begin{enumerate}
+        \item The crane must operate reliably.
+        \item The crane must operate safely and not cause harm to people.
+    \end{enumerate}
+    \vspace{1em}
+    
+    \item Non-functional requirements for the camera.
+    \begin{enumerate}
+        \item The camera must operate reliably.
+    \end{enumerate}
+\end{enumerate}
+
