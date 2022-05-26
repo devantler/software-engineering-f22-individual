@@ -27,3 +27,5 @@ This repo contains everything from our main repository, which is related to the 
   - Added DeviceState
 - Added enum SERVICE_NAME to specify supported services.
 - Added title separators for configuration, logic, unit tests and Uppaal queries.
+- Code generated project title from system name for Orchestrator
+- Code generated system folder name from system name for UPPAAL Project

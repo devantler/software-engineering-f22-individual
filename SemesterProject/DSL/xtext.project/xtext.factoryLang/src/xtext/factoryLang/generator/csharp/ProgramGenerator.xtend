@@ -1,4 +1,4 @@
-package xtext.factoryLang.generator.subgenerators
+package xtext.factoryLang.generator.csharp
 
 import java.util.List
 import org.eclipse.xtext.generator.IFileSystemAccess2
@@ -28,9 +28,9 @@ import xtext.factoryLang.factoryLang.DiskWaitOperation
 
 class ProgramGenerator {
 
-	def static generate(IFileSystemAccess2 fsa, List<Device> devices, List<Statement> statements) {
+	def static generate(IFileSystemAccess2 fsa, String name, List<Device> devices, List<Statement> statements) {
 		fsa.generateFile(
-			'OrchestratorService/Program.cs',
+			'''«name»/Program.cs''',
 			'''
 				using System;
 				using Entities;
@@ -58,12 +58,14 @@ class ProgramGenerator {
 		bool running = true;
 		#endregion
 	'''
+
 	protected def static CharSequence generateMainLoop() '''
 		#region Main
 		Setup();
 		Run().GetAwaiter().GetResult();
 		#endregion
 	'''
+
 	protected def static CharSequence generateSetupMethod(List<Device> devices) '''
 		void Setup()
 		{
@@ -74,6 +76,7 @@ class ProgramGenerator {
 			«generateCameras(devices.filter[it instanceof Camera].map[it as Camera].toList)»
 		}
 	'''
+
 	protected def static CharSequence generateCranes(List<Crane> cranes) '''
 		«IF cranes.size > 0» 
 			«FOR crane:cranes»
@@ -86,6 +89,7 @@ class ProgramGenerator {
 			«ENDFOR»
 		«ENDIF»
 	'''
+
 	protected def static CharSequence generateDisks(List<Disk> disks) '''
 		«IF disks.size > 0»
 			«FOR disk:disks»
@@ -98,6 +102,7 @@ class ProgramGenerator {
 			«ENDFOR»
 		«ENDIF»
 	'''
+
 	protected def static CharSequence generateCameras(List<Camera> cameras) '''
 		«IF cameras.size > 0»
 			«FOR camera:cameras»
@@ -110,6 +115,7 @@ class ProgramGenerator {
 			«ENDFOR»
 		«ENDIF»
 	'''
+
 	protected def static CharSequence generateRunMethod(List<Device> devices, List<Statement> statements) {
 		'''
 			async Task Run()	
@@ -133,6 +139,7 @@ class ProgramGenerator {
 			}
 		'''
 	}
+
 	protected def static CharSequence generateStatement(Statement statement) {
 		// remember scope for local variables
 		switch statement {
@@ -167,8 +174,9 @@ class ProgramGenerator {
 			VariableConditional: {
 				val variableName = statement.variable.name
 				val variableType = statement.variable.getClass()
-				val dotOrComparisonOperator = variableType == GlobalVariableImpl ? " " +
-						EnumParser.parseComparisonOperator(statement.comparison_operator) + " " : "."
+				val dotOrComparisonOperator = variableType == GlobalVariableImpl
+						? " " + EnumParser.parseComparisonOperator(statement.comparison_operator) + " "
+						: "."
 				val conditionalQuotationMark = variableType == GlobalVariableImpl ? '"' : ''
 				val variableValue = ValueParser.parseVariableValue(statement.variableValue, variableType)
 				'''
@@ -201,7 +209,7 @@ class ProgramGenerator {
 				val targetName = statement.target.name
 				val diskSlotValue = ValueParser.parseDiskSlotValue(statement.diskSlotValue, statement.getClass())
 				val quantity = statement.quantity
-				
+
 				'''
 					«IF quantity > 0»
 						Task.Run(async () =>
