@@ -15,7 +15,7 @@
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.5.5.20211231" />
     <PackageReference Include="OpenCvSharp4.runtime.raspbian.stretch" Version="4.3.0.20200527" />
     <PackageReference Include="OpenCvSharp4.runtime.ubuntu.18.04-x64" Version="4.5.5.20211231" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
   </ItemGroup>
 
 </Project>
