@@ -4,10 +4,22 @@ generate factoryLang "http://www.factoryLang.xtext/FactoryLang"
 
 Model:
 	'init' 'system' 'named' name=ID
+	'CONFIGURATION:' 
+	BEGIN
 	configuration=Configuration
+	END
+	'LOGIC:' 
+	BEGIN
 	statements+=Statement*
+	END
+	'UNIT TESTS:' 
+	BEGIN
 	unitTests+=UnitTest*
-	uppaalQueries+=UppaalQuery*;
+	END
+	'UPPAAL QUERIES:' 
+	BEGIN
+	uppaalQueries+=UppaalQuery*
+	END;
 
 // uppaalQueries+=UppaalQuery+;
 // ----- CONFIGURATION ----- //

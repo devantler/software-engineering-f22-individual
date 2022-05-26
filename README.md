@@ -11,7 +11,7 @@ This repo contains everything from our main repository, which is related to the 
   - Added Mqtt grammar rule
   - Added Database grammar rule
   - Added Address grammar rule
-- Changed Device grammar rule to include 'create' key word
+- Changed Device grammar rule to include 'create' keyword
 - Added UnitTest grammar rule
   - Added HealthCheckUnitTest
   - Added DeviceInitializationUnitTest
@@ -26,4 +26,4 @@ This repo contains everything from our main repository, which is related to the 
   - Added ValueExpression
   - Added DeviceState
 - Added enum SERVICE_NAME to specify supported services.
-- Extended Configuration to accept defining services.
+- Added title separators for configuration, logic, unit tests and Uppaal queries.
