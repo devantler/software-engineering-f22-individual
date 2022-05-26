@@ -3,14 +3,27 @@ grammar xtext.factoryLang.FactoryLang with org.eclipse.xtext.common.Terminals
 generate factoryLang "http://www.factoryLang.xtext/FactoryLang"
 
 Model:
-	configurations+=Configuration+ statements+=Statement+ unitTests+=UnitTest+ uppaalQueries+=UppaalQuery+;
+	'init' 'system' 'named' name=ID
+	configuration=Configuration
+	statements+=Statement*
+	unitTests+=UnitTest*
+	uppaalQueries+=UppaalQuery*;
 
+// uppaalQueries+=UppaalQuery+;
 // ----- CONFIGURATION ----- //
 Configuration:
-	'create' device=Device;
+	{Configuration} services+=Service* devices+=Device*;
 
+// ----- CONFIGURATION:SERVICE ----- //
+Service:
+	'define' serviceName=SERVICE_NAME 'named' name=ID 'with' address=Address ':' port=INT;
+
+Address:
+	ID ('.' ID)*;
+
+// ----- CONFIGURATION:DEVICE ----- //
 Device:
-	Crane | Disk | Camera;
+	'create' (Crane | Disk | Camera);
 
 // ----- CONFIGURATION:CRANE ----- //
 Crane returns Device:
@@ -80,7 +93,8 @@ CraneDropOperation returns CraneOperation:
 
 // ----- STATEMENTS:OPERATIONS:DISK ----- //
 DiskOperation returns Operation:
-	DiskMoveEmptySlotOperation | DiskMoveVariableSlotOperation | DiskMoveSlotOperation | DiskMarkSlotOperation | DiskWaitOperation;
+	DiskMoveEmptySlotOperation | DiskMoveVariableSlotOperation | DiskMoveSlotOperation | DiskMarkSlotOperation |
+	DiskWaitOperation;
 
 DiskMoveSlotOperation returns DiskOperation:
 	{DiskMoveSlotOperation} device=[Disk] 'move' 'slot' 'at' source=[DiskZoneParameter] 'to'
@@ -118,12 +132,45 @@ ForEach returns Loop:
 	'then' BEGIN statements+=Statement* END;
 
 // ----- UnitTests ----- //
+UnitTest:
+	HealthCheckUnitTest | DeviceInitializationUnitTest | RunWithoutFailureUnitTest;
 
-// Add UnitTests
+HealthCheckUnitTest returns UnitTest:
+	'test' address=[Service] 'health' 'status' 'is' status=STATUS;
+
+DeviceInitializationUnitTest returns UnitTest:
+	'test' devices+=[Device] (',' devices+=[Device])* 'is' 'initialized';
+
+RunWithoutFailureUnitTest returns UnitTest:
+	'test' application=[Model] 'runs' 'without' 'failure';
 
 // ----- UppaalQueries ----- //
+UppaalQuery:
+	AllPathsUppaalQuery | OnePathUppaalQuery | LeadsToUppaalQuery;
 
-// Add UppaalQueries
+AllPathsUppaalQuery:
+	'query' 'that' ('forever' | 'eventually') 'on' 'all' 'paths' expression=Expression;
+
+OnePathUppaalQuery:
+	'query' 'that' ('forever' | 'eventually') 'on' 'one' 'path' expression=Expression;
+
+LeadsToUppaalQuery:
+	'query' 'that' '(' BEGIN stateOne=ValueExpression 'leads' 'to' stateTwo=ValueExpression END ')';
+
+Expression:
+	'(' BEGIN expression=AndOrExpression END ')';
+
+AndOrExpression returns Expression:
+	ImplyExpression (({Or.left=current} 'or' | {And.left=current} 'and') right=ImplyExpression)*;
+
+ImplyExpression returns Expression:
+	ValueExpression (({Imply.left=current} 'imply') right=ValueExpression)*;
+
+ValueExpression returns Expression:
+	{Parenthesis} '(' parenthesizedExpression=AndOrExpression ')' | DeviceState;
+
+DeviceState:
+	device=[Device] '.' location=ID;
 
 // ----- VARIABLES ----- //
 LocalVariable returns Variable:
@@ -170,6 +217,12 @@ enum DISK_STATES:
 
 enum TIME:
 	SECONDS='seconds' | SECOND='second' | MINUTES='minutes' | MINUTE='minute' | HOURS='hours' | HOUR='hour';
+
+enum SERVICE_NAME:
+	MQTT='mqtt' | DATABASE='database';
+
+enum STATUS:
+	UP='up' | DOWN='down';
 
 // ----- TERMINALS ----- //
 terminal BEGIN:

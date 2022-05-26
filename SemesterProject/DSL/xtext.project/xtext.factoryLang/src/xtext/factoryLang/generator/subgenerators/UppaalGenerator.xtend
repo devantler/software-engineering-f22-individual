@@ -26,9 +26,9 @@ class UppaalGenerator {
 
 	def static generate(IFileSystemAccess2 fsa, Resource resource) {
 		val model = resource.allContents.filter(Model).next
-		val discs = model.configurations.map[device].filter[it instanceof Disk].map[x|x as Disk]
-		val cranes = model.configurations.map[device].filter[it instanceof Crane].map[x|x as Crane]
-		val cameras = model.configurations.map[device].filter[it instanceof Camera].map[x|x as Camera]
+		val discs = model.configuration.devices.map[it].filter[it instanceof Disk].map[x|x as Disk]
+		val cranes = model.configuration.devices.map[it].filter[it instanceof Crane].map[x|x as Crane]
+		val cameras = model.configuration.devices.map[it].filter[it instanceof Camera].map[x|x as Camera]
 		val discSlotStateValues = resource.allContents.filter(DiskSlotStateValue).map[value].toSet.map[toString]
 		UppaalGenerator.statementsIndexer = getStatements(model.statements)
 		fsa.generateFile(
