@@ -63,7 +63,7 @@ class FactoryLangScopeProvider extends AbstractFactoryLangScopeProvider {
 				tempDeviceName = (operation as DiskOperation).device.name
 		}
 		val deviceName = tempDeviceName // xtend is more little bitch
-		val device = root.configurations.filter[device.name == deviceName].map[device].toList
+		val device = root.configuration.devices.filter[it.name == deviceName].map[it].toList
 		val targets = device.get(0).targets
 
 		return Scopes.scopeFor(targets)
@@ -84,7 +84,7 @@ class FactoryLangScopeProvider extends AbstractFactoryLangScopeProvider {
 		val deviceName = deviceConditional.device.name
 
 		val root = EcoreUtil2.getRootContainer(deviceValue) as Model
-		val device = root.configurations.filter[device.name == deviceName].map[device].get(0)
+		val device = root.configuration.devices.filter[it.name == deviceName].map[it].get(0)
 		var targets = device.targets
 		return Scopes.scopeFor(targets)
 	}

@@ -26,7 +26,7 @@ class FactoryLangGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val model = resource.allContents.filter(Model).next
-		val devices = model.configurations.map[device]
+		val devices = model.configuration.devices.map[it]
 		val statements = model.statements
 		try { 
 			ProgramGenerator.generate(fsa, devices, statements)
