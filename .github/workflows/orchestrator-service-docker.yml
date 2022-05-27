@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'SemesterProject/RaspberryPi/OrchestratorService/**'
+    - '.github/workflows/orchestrator-service-docker.yml'
     branches:
       - master
     tags:
