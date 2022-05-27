@@ -20,7 +20,7 @@ FROM build AS publish
 WORKDIR /app/src/OrchestratorService
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app
 COPY --from=publish /app/src/OrchestratorService/out ./
 EXPOSE 5000
