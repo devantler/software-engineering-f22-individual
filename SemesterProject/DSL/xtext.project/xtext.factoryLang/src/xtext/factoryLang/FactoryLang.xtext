@@ -4,19 +4,19 @@ generate factoryLang "http://www.factoryLang.xtext/FactoryLang"
 
 Model:
 	'init' 'system' 'named' name=ID
-	'CONFIGURATION:' 
+	'CONFIGURATION:'
 	BEGIN
 	configuration=Configuration
 	END
-	'LOGIC:' 
+	'LOGIC:'
 	BEGIN
 	statements+=Statement*
 	END
-	'UNIT TESTS:' 
+	'UNIT TESTS:'
 	BEGIN
 	unitTests+=UnitTest*
 	END
-	'UPPAAL QUERIES:' 
+	'UPPAAL QUERIES:'
 	BEGIN
 	uppaalQueries+=UppaalQuery*
 	END;
@@ -154,7 +154,8 @@ ConnectionUnitTest returns UnitTest:
 	{ConnectionUnitTest} 'test' service=[Service] 'and' 'assert' 'connection' 'is' status=STATUS;
 
 DeviceInitializationUnitTest returns UnitTest:
-	{DeviceInitializationUnitTest} 'test' devices+=[Device] (',' devices+=[Device])* 'and' 'assert' ('device' | 'devices') ('is' | 'are') 'initialized';
+	{DeviceInitializationUnitTest} 'test' devices+=[Device] (',' devices+=[Device])* 'and' 'assert' ('device' |
+	'devices') ('is' | 'are') 'initialized';
 
 RunWithoutFailureUnitTest returns UnitTest:
 	{RunWithoutFailureUnitTest} 'test' application=[Model] 'and' 'assert' 'it' 'runs';
@@ -164,22 +165,22 @@ UppaalQuery:
 	AllPathsUppaalQuery | OnePathUppaalQuery | LeadsToUppaalQuery;
 
 AllPathsUppaalQuery:
-	{AllPathsUppaalQuery} 'query' 'that' property=('forever' | 'eventually') 'on' 'all' 'paths' expression=Expression;
+	{AllPathsUppaalQuery} 'query' 'that' property=('forever' | 'eventually') 'on' 'all' 'paths' '(' BEGIN not=('not')?
+	expression=AndOrExpression END ')';
 
 OnePathUppaalQuery:
-	{OnePathUppaalQuery} 'query' 'that' property=('forever' | 'eventually') 'on' 'one' 'path' expression=Expression;
+	{OnePathUppaalQuery} 'query' 'that' property=('forever' | 'eventually') 'on' 'one' 'path' '(' BEGIN not=('not')?
+	expression=AndOrExpression END ')';
 
 LeadsToUppaalQuery:
-	{LeadsToUppaalQuery} 'query' 'that' '(' BEGIN stateOne=ValueExpression 'leads' 'to' stateTwo=ValueExpression END ')';
-
-Expression:
-	'(' BEGIN expression=AndOrExpression END ')';
+	{LeadsToUppaalQuery} 'query' 'that' '(' BEGIN not1=('not')? stateOne=ValueExpression 'leads' 'to' not2=('not')?
+	stateTwo=ValueExpression END ')';
 
 AndOrExpression returns Expression:
-	ImplyExpression (({Or.left=current} 'or' | {And.left=current} 'and') right=ImplyExpression)*;
+	ImplyExpression (({Or.left=current} 'or' | {And.left=current} 'and') not=('not')? right=ImplyExpression)*;
 
 ImplyExpression returns Expression:
-	ValueExpression (({Imply.left=current} 'imply') right=ValueExpression)*;
+	ValueExpression (({Imply.left=current} 'imply') not=('not')? right=ValueExpression)*;
 
 ValueExpression returns Expression:
 	{Parenthesis} '(' parenthesizedExpression=AndOrExpression ')' | DeviceState;
