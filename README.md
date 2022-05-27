@@ -4,6 +4,8 @@ This repo contains everything from our main repository, which is related to the 
 
 ## List of Changes
 
+- Updated workflow for orchestrator service.
+
 ### General Grammar
 
 - Added system initialization so the system has a name
