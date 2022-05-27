@@ -79,39 +79,43 @@ class UppaalQueryGenerator {
 		switch query {
 			AllPathsUppaalQuery: '''
 				<query>
-					<formula>A«parseProperty(query.property)» «parseExpression(query.expression.expression)»</formula>
+					<formula>A«parseProperty(query.property)» «parseNot(query.not)»«parseExpression(query.expression)»</formula>
 					<comment></comment>
 				</query>
 			'''
 			OnePathUppaalQuery: '''
 				<query>
-					<formula>E«parseProperty(query.property)» «parseExpression(query.expression.expression)»</formula>
+					<formula>E«parseProperty(query.property)» «parseNot(query.not)»«parseExpression(query.expression)»</formula>
 					<comment></comment>
 				</query>
 			'''
 			LeadsToUppaalQuery: '''
 				<query>
-					<formula>«parseExpression(query.stateOne)» --> «parseExpression(query.stateTwo)»</formula>
+					<formula>«parseNot(query.not1)»«parseExpression(query.stateOne)» --> «parseNot(query.not2)»«parseExpression(query.stateTwo)»</formula>
 					<comment></comment>
 				</query>
 			'''
 		}
 	}
 
-	def static parseExpression(Expression expression) {
+	def static String parseExpression(Expression expression) {
 		switch expression {
-			Or: '''«parseExpression(expression.left)» or «parseExpression(expression.right)»'''
-			And: '''«parseExpression(expression.left)» and «parseExpression(expression.right)»'''
-			Imply: '''«parseExpression(expression.left)» imply «parseExpression(expression.right)»'''
+			Or: '''«parseExpression(expression.left)» or «parseNot(expression.not)»«parseExpression(expression.right)»'''
+			And: '''«parseExpression(expression.left)» and «parseNot(expression.not)»«parseExpression(expression.right)»'''
+			Imply: '''«parseExpression(expression.left)» imply «parseNot(expression.not)»«parseExpression(expression.right)»'''
 			Parenthesis: '''(«parseExpression(expression.parenthesizedExpression)»)'''
 			DeviceState: '''«expression.device.name».«expression.location»'''
 		}
+	}
+	
+	def static parseNot(String string) {
+		return string == 'not' ? '!' : ''
 	}
 
 	def static parseProperty(String property) {
 		switch property {
 			case "forever": "[]"
-			case "eventually": "<>"
+			case "eventually": "&lt;&gt;"
 		}
 	}
 

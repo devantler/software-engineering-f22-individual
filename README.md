@@ -42,6 +42,7 @@ This repo contains everything from our main repository, which is related to the 
   - Added ImplyExpression
   - Added ValueExpression
   - Added DeviceState
+  - Added Negation
 
 ### C# Code generation
 
@@ -61,3 +62,8 @@ This repo contains everything from our main repository, which is related to the 
 
 - Moved all UPPAAL code generation files to `xtext.factoryLang.generator.uppaal`
 - Code generated system folder name from system name for UPPAAL Project
+- Code generated Queries
+  - Implemented AllPathsUppaalQuery
+  - Implemented OnePathUppaalQuery
+  - Implemented LeadsToUppaalQuery
+  - Implemented Negation

@@ -4,7 +4,7 @@
 	<declaration>
 //disk1
 
-const int disk1_numberOfSlots = 8;
+const int disk1_numberOfSlots = 4;
 typedef int[0,disk1_numberOfSlots-1] disk1_id_t;
 chan disk1_goto[disk1_numberOfSlots];
 chan disk1_addItemCmd, disk1_removeItemCmd;
@@ -23,17 +23,17 @@ chan disk1_gottenColourSlot;
 chan disk1_set_complete[disk1_numberOfSlots];
 chan disk1_getcompleteSlot;
 chan disk1_foundcompleteSlot;
-bool disk1_notcompleteSlots[disk1_numberOfSlots] = {1, 1, 1, 1, 1, 1, 1, 1};
+bool disk1_notcompleteSlots[disk1_numberOfSlots] = {1, 1, 1, 1};
 //free tag
 chan disk1_set_free[disk1_numberOfSlots];
 chan disk1_getfreeSlot;
 chan disk1_foundfreeSlot;
-bool disk1_notfreeSlots[disk1_numberOfSlots] = {1, 1, 1, 1, 1, 1, 1, 1};
+bool disk1_notfreeSlots[disk1_numberOfSlots] = {1, 1, 1, 1};
 //in_progress tag
 chan disk1_set_in_progress[disk1_numberOfSlots];
 chan disk1_getin_progressSlot;
 chan disk1_foundin_progressSlot;
-bool disk1_notin_progressSlots[disk1_numberOfSlots] = {1, 1, 1, 1, 1, 1, 1, 1};
+bool disk1_notin_progressSlots[disk1_numberOfSlots] = {1, 1, 1, 1};
 
 //Zones: 
 int disk1_zones_craneZone = 1;
@@ -655,50 +655,6 @@ clock timer;</declaration>
 			<name>RemoveItem4Req</name>
 			<committed/>
 		</location>
-		<location id="id70">
-			<name>Position5</name>
-		</location>
-		<location id="id71">
-			<name>AddItem5Req</name>
-			<committed/>
-		</location>
-		<location id="id72">
-			<name>RemoveItem5Req</name>
-			<committed/>
-		</location>
-		<location id="id73">
-			<name>Position6</name>
-		</location>
-		<location id="id74">
-			<name>AddItem6Req</name>
-			<committed/>
-		</location>
-		<location id="id75">
-			<name>RemoveItem6Req</name>
-			<committed/>
-		</location>
-		<location id="id76">
-			<name>Position7</name>
-		</location>
-		<location id="id77">
-			<name>AddItem7Req</name>
-			<committed/>
-		</location>
-		<location id="id78">
-			<name>RemoveItem7Req</name>
-			<committed/>
-		</location>
-		<location id="id79">
-			<name>Position8</name>
-		</location>
-		<location id="id80">
-			<name>AddItem8Req</name>
-			<committed/>
-		</location>
-		<location id="id81">
-			<name>RemoveItem8Req</name>
-			<committed/>
-		</location>
 		<location id="id82">
 			<name>Stopped</name>
 		</location>
@@ -744,26 +700,6 @@ clock timer;</declaration>
 			<label kind="synchronisation">disk1_goto[0]?</label>
 		</transition>
 		<transition>
-			<source ref="id70"/>
-			<target ref="id58"/>
-			<label kind="synchronisation">disk1_goto[0]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id58"/>
-			<label kind="synchronisation">disk1_goto[0]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id58"/>
-			<label kind="synchronisation">disk1_goto[0]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id58"/>
-			<label kind="synchronisation">disk1_goto[0]?</label>
-		</transition>
-		<transition>
 			<source ref="id58"/>
 			<target ref="id58"/>
 			<label kind="synchronisation">disk1_goto[0]?</label>
@@ -800,26 +736,6 @@ clock timer;</declaration>
 		</transition>
 		<transition>
 			<source ref="id67"/>
-			<target ref="id61"/>
-			<label kind="synchronisation">disk1_goto[1]?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id61"/>
-			<label kind="synchronisation">disk1_goto[1]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id61"/>
-			<label kind="synchronisation">disk1_goto[1]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id61"/>
-			<label kind="synchronisation">disk1_goto[1]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
 			<target ref="id61"/>
 			<label kind="synchronisation">disk1_goto[1]?</label>
 		</transition>
@@ -864,26 +780,6 @@ clock timer;</declaration>
 			<label kind="synchronisation">disk1_goto[2]?</label>
 		</transition>
 		<transition>
-			<source ref="id70"/>
-			<target ref="id64"/>
-			<label kind="synchronisation">disk1_goto[2]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id64"/>
-			<label kind="synchronisation">disk1_goto[2]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id64"/>
-			<label kind="synchronisation">disk1_goto[2]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id64"/>
-			<label kind="synchronisation">disk1_goto[2]?</label>
-		</transition>
-		<transition>
 			<source ref="id58"/>
 			<target ref="id64"/>
 			<label kind="synchronisation">disk1_goto[2]?</label>
@@ -924,26 +820,6 @@ clock timer;</declaration>
 			<label kind="synchronisation">disk1_removeItem[currentSlot]!</label>
 		</transition>
 		<transition>
-			<source ref="id70"/>
-			<target ref="id67"/>
-			<label kind="synchronisation">disk1_goto[3]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id67"/>
-			<label kind="synchronisation">disk1_goto[3]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id67"/>
-			<label kind="synchronisation">disk1_goto[3]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id67"/>
-			<label kind="synchronisation">disk1_goto[3]?</label>
-		</transition>
-		<transition>
 			<source ref="id58"/>
 			<target ref="id67"/>
 			<label kind="synchronisation">disk1_goto[3]?</label>
@@ -962,266 +838,6 @@ clock timer;</declaration>
 			<source ref="id67"/>
 			<target ref="id67"/>
 			<label kind="synchronisation">disk1_goto[3]?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id82"/>
-			<label kind="synchronisation">emergencyStop?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id71"/>
-			<label kind="synchronisation">disk1_addItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id72"/>
-			<label kind="synchronisation">disk1_removeItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id71"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_addItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id72"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_removeItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id58"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id61"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id64"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id67"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id70"/>
-			<label kind="synchronisation">disk1_goto[4]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id82"/>
-			<label kind="synchronisation">emergencyStop?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id74"/>
-			<label kind="synchronisation">disk1_addItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id75"/>
-			<label kind="synchronisation">disk1_removeItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id74"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_addItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id75"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_removeItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id58"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id61"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id64"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id67"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id73"/>
-			<label kind="synchronisation">disk1_goto[5]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id82"/>
-			<label kind="synchronisation">emergencyStop?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id77"/>
-			<label kind="synchronisation">disk1_addItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id78"/>
-			<label kind="synchronisation">disk1_removeItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id77"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_addItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id78"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_removeItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id58"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id61"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id64"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id67"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id76"/>
-			<label kind="synchronisation">disk1_goto[6]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id82"/>
-			<label kind="synchronisation">emergencyStop?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id80"/>
-			<label kind="synchronisation">disk1_addItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id81"/>
-			<label kind="synchronisation">disk1_removeItemCmd?</label>
-		</transition>
-		<transition>
-			<source ref="id80"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_addItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id81"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_removeItem[currentSlot]!</label>
-		</transition>
-		<transition>
-			<source ref="id58"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id61"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id64"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id67"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id70"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id73"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id76"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
-		</transition>
-		<transition>
-			<source ref="id79"/>
-			<target ref="id79"/>
-			<label kind="synchronisation">disk1_goto[7]?</label>
 		</transition>
 	</template>
 	<template>
@@ -1392,22 +1008,6 @@ clock timer;</declaration>
 			<name>disk1_Get4</name>
 			<committed/>
 		</location>
-		<location id="id98">
-			<name>disk1_Get5</name>
-			<committed/>
-		</location>
-		<location id="id99">
-			<name>disk1_Get6</name>
-			<committed/>
-		</location>
-		<location id="id100">
-			<name>disk1_Get7</name>
-			<committed/>
-		</location>
-		<location id="id101">
-			<name>disk1_Get8</name>
-			<committed/>
-		</location>
 		<init ref="id93"/>
 		<transition>
 			<source ref="id94"/>
@@ -1457,54 +1057,6 @@ clock timer;</declaration>
 			<label kind="guard">!disk1_notemptySlots[3]</label>
 			<label kind="synchronisation">disk1_getemptySlot?</label>
 		</transition>
-		<transition>
-			<source ref="id98"/>
-			<target ref="id93"/>
-			<label kind="synchronisation">disk1_foundemptySlot!</label>
-			<label kind="assignment">currentSlot = 4</label>
-		</transition>
-		<transition>
-			<source ref="id93"/>
-			<target ref="id98"/>
-			<label kind="guard">!disk1_notemptySlots[4]</label>
-			<label kind="synchronisation">disk1_getemptySlot?</label>
-		</transition>
-		<transition>
-			<source ref="id99"/>
-			<target ref="id93"/>
-			<label kind="synchronisation">disk1_foundemptySlot!</label>
-			<label kind="assignment">currentSlot = 5</label>
-		</transition>
-		<transition>
-			<source ref="id93"/>
-			<target ref="id99"/>
-			<label kind="guard">!disk1_notemptySlots[5]</label>
-			<label kind="synchronisation">disk1_getemptySlot?</label>
-		</transition>
-		<transition>
-			<source ref="id100"/>
-			<target ref="id93"/>
-			<label kind="synchronisation">disk1_foundemptySlot!</label>
-			<label kind="assignment">currentSlot = 6</label>
-		</transition>
-		<transition>
-			<source ref="id93"/>
-			<target ref="id100"/>
-			<label kind="guard">!disk1_notemptySlots[6]</label>
-			<label kind="synchronisation">disk1_getemptySlot?</label>
-		</transition>
-		<transition>
-			<source ref="id101"/>
-			<target ref="id93"/>
-			<label kind="synchronisation">disk1_foundemptySlot!</label>
-			<label kind="assignment">currentSlot = 7</label>
-		</transition>
-		<transition>
-			<source ref="id93"/>
-			<target ref="id101"/>
-			<label kind="guard">!disk1_notemptySlots[7]</label>
-			<label kind="synchronisation">disk1_getemptySlot?</label>
-		</transition>
 	</template>
 	<template>
 		<name>disk1_GetcompleteSlot</name>
@@ -1525,22 +1077,6 @@ clock timer;</declaration>
 		</location>
 		<location id="id97">
 			<name>disk1_Get4</name>
-			<committed/>
-		</location>
-		<location id="id98">
-			<name>disk1_Get5</name>
-			<committed/>
-		</location>
-		<location id="id99">
-			<name>disk1_Get6</name>
-			<committed/>
-		</location>
-		<location id="id100">
-			<name>disk1_Get7</name>
-			<committed/>
-		</location>
-		<location id="id101">
-			<name>disk1_Get8</name>
 			<committed/>
 		</location>
 		<init ref="id102"/>
@@ -1590,54 +1126,6 @@ clock timer;</declaration>
 			<source ref="id102"/>
 			<target ref="id97"/>
 			<label kind="guard">!disk1_notcompleteSlots[3]</label>
-			<label kind="synchronisation">disk1_getcompleteSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id98"/>
-			<target ref="id102"/>
-			<label kind="synchronisation">disk1_foundcompleteSlot!</label>
-			<label kind="assignment">currentSlot = 4</label>
-		</transition>
-		<transition>
-			<source ref="id102"/>
-			<target ref="id98"/>
-			<label kind="guard">!disk1_notcompleteSlots[4]</label>
-			<label kind="synchronisation">disk1_getcompleteSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id99"/>
-			<target ref="id102"/>
-			<label kind="synchronisation">disk1_foundcompleteSlot!</label>
-			<label kind="assignment">currentSlot = 5</label>
-		</transition>
-		<transition>
-			<source ref="id102"/>
-			<target ref="id99"/>
-			<label kind="guard">!disk1_notcompleteSlots[5]</label>
-			<label kind="synchronisation">disk1_getcompleteSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id100"/>
-			<target ref="id102"/>
-			<label kind="synchronisation">disk1_foundcompleteSlot!</label>
-			<label kind="assignment">currentSlot = 6</label>
-		</transition>
-		<transition>
-			<source ref="id102"/>
-			<target ref="id100"/>
-			<label kind="guard">!disk1_notcompleteSlots[6]</label>
-			<label kind="synchronisation">disk1_getcompleteSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id101"/>
-			<target ref="id102"/>
-			<label kind="synchronisation">disk1_foundcompleteSlot!</label>
-			<label kind="assignment">currentSlot = 7</label>
-		</transition>
-		<transition>
-			<source ref="id102"/>
-			<target ref="id101"/>
-			<label kind="guard">!disk1_notcompleteSlots[7]</label>
 			<label kind="synchronisation">disk1_getcompleteSlot?</label>
 		</transition>
 	</template>
@@ -1691,22 +1179,6 @@ clock timer;</declaration>
 			<name>disk1_Get4</name>
 			<committed/>
 		</location>
-		<location id="id98">
-			<name>disk1_Get5</name>
-			<committed/>
-		</location>
-		<location id="id99">
-			<name>disk1_Get6</name>
-			<committed/>
-		</location>
-		<location id="id100">
-			<name>disk1_Get7</name>
-			<committed/>
-		</location>
-		<location id="id101">
-			<name>disk1_Get8</name>
-			<committed/>
-		</location>
 		<init ref="id105"/>
 		<transition>
 			<source ref="id94"/>
@@ -1754,54 +1226,6 @@ clock timer;</declaration>
 			<source ref="id105"/>
 			<target ref="id97"/>
 			<label kind="guard">!disk1_notfreeSlots[3]</label>
-			<label kind="synchronisation">disk1_getfreeSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id98"/>
-			<target ref="id105"/>
-			<label kind="synchronisation">disk1_foundfreeSlot!</label>
-			<label kind="assignment">currentSlot = 4</label>
-		</transition>
-		<transition>
-			<source ref="id105"/>
-			<target ref="id98"/>
-			<label kind="guard">!disk1_notfreeSlots[4]</label>
-			<label kind="synchronisation">disk1_getfreeSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id99"/>
-			<target ref="id105"/>
-			<label kind="synchronisation">disk1_foundfreeSlot!</label>
-			<label kind="assignment">currentSlot = 5</label>
-		</transition>
-		<transition>
-			<source ref="id105"/>
-			<target ref="id99"/>
-			<label kind="guard">!disk1_notfreeSlots[5]</label>
-			<label kind="synchronisation">disk1_getfreeSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id100"/>
-			<target ref="id105"/>
-			<label kind="synchronisation">disk1_foundfreeSlot!</label>
-			<label kind="assignment">currentSlot = 6</label>
-		</transition>
-		<transition>
-			<source ref="id105"/>
-			<target ref="id100"/>
-			<label kind="guard">!disk1_notfreeSlots[6]</label>
-			<label kind="synchronisation">disk1_getfreeSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id101"/>
-			<target ref="id105"/>
-			<label kind="synchronisation">disk1_foundfreeSlot!</label>
-			<label kind="assignment">currentSlot = 7</label>
-		</transition>
-		<transition>
-			<source ref="id105"/>
-			<target ref="id101"/>
-			<label kind="guard">!disk1_notfreeSlots[7]</label>
 			<label kind="synchronisation">disk1_getfreeSlot?</label>
 		</transition>
 	</template>
@@ -1855,22 +1279,6 @@ clock timer;</declaration>
 			<name>disk1_Get4</name>
 			<committed/>
 		</location>
-		<location id="id98">
-			<name>disk1_Get5</name>
-			<committed/>
-		</location>
-		<location id="id99">
-			<name>disk1_Get6</name>
-			<committed/>
-		</location>
-		<location id="id100">
-			<name>disk1_Get7</name>
-			<committed/>
-		</location>
-		<location id="id101">
-			<name>disk1_Get8</name>
-			<committed/>
-		</location>
 		<init ref="id108"/>
 		<transition>
 			<source ref="id94"/>
@@ -1918,54 +1326,6 @@ clock timer;</declaration>
 			<source ref="id108"/>
 			<target ref="id97"/>
 			<label kind="guard">!disk1_notin_progressSlots[3]</label>
-			<label kind="synchronisation">disk1_getin_progressSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id98"/>
-			<target ref="id108"/>
-			<label kind="synchronisation">disk1_foundin_progressSlot!</label>
-			<label kind="assignment">currentSlot = 4</label>
-		</transition>
-		<transition>
-			<source ref="id108"/>
-			<target ref="id98"/>
-			<label kind="guard">!disk1_notin_progressSlots[4]</label>
-			<label kind="synchronisation">disk1_getin_progressSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id99"/>
-			<target ref="id108"/>
-			<label kind="synchronisation">disk1_foundin_progressSlot!</label>
-			<label kind="assignment">currentSlot = 5</label>
-		</transition>
-		<transition>
-			<source ref="id108"/>
-			<target ref="id99"/>
-			<label kind="guard">!disk1_notin_progressSlots[5]</label>
-			<label kind="synchronisation">disk1_getin_progressSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id100"/>
-			<target ref="id108"/>
-			<label kind="synchronisation">disk1_foundin_progressSlot!</label>
-			<label kind="assignment">currentSlot = 6</label>
-		</transition>
-		<transition>
-			<source ref="id108"/>
-			<target ref="id100"/>
-			<label kind="guard">!disk1_notin_progressSlots[6]</label>
-			<label kind="synchronisation">disk1_getin_progressSlot?</label>
-		</transition>
-		<transition>
-			<source ref="id101"/>
-			<target ref="id108"/>
-			<label kind="synchronisation">disk1_foundin_progressSlot!</label>
-			<label kind="assignment">currentSlot = 7</label>
-		</transition>
-		<transition>
-			<source ref="id108"/>
-			<target ref="id101"/>
-			<label kind="guard">!disk1_notin_progressSlots[7]</label>
 			<label kind="synchronisation">disk1_getin_progressSlot?</label>
 		</transition>
 	</template>
@@ -2361,7 +1721,7 @@ clock timer;</declaration>
 	<comment></comment>
 </query>
 <query>
-	<formula>A<> (disk1.Stopped and crane1.Stopped) imply (disk1.Position1 and crane1.Stopped)</formula>
+	<formula>A&lt;&gt; (disk1.Stopped and crane1.Stopped) imply (disk1.Position1 and crane1.Stopped)</formula>
 	<comment></comment>
 </query>
 <query>
@@ -2369,7 +1729,7 @@ clock timer;</declaration>
 	<comment></comment>
 </query>
 <query>
-	<formula>E<> disk1.Position1 imply disk1.Position2</formula>
+	<formula>E&lt;&gt; disk1.Position1 imply disk1.Position2</formula>
 	<comment></comment>
 </query>
 <query>

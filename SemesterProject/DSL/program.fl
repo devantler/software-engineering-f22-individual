@@ -11,7 +11,7 @@ CONFIGURATION:
 		with position at 70 named outBlue  
 	
 	create disk named disk1
-		with 8 slots
+		with 4 slots
 		with zone named craneZone  at slot 1 
 		with zone named cameraZone at slot 2
 		with zone named intakeZone at slot 3 
@@ -79,4 +79,9 @@ UPPAAL QUERIES:
 	//camera1.camera1_Green --> camera1.camera1_Idle
 	query that (
 		camera1.camera1_Green leads to camera1.camera1_Idle
+	)
+	
+	//Just a test to show negation works
+	query that eventually on all paths (
+		not camera1.dsd or not disk1.sds
 	)
