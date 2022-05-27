@@ -51,6 +51,5 @@ jobs:
           file: SemesterProject/RaspberryPi/OrchestratorService/Dockerfile
           platforms: linux/arm64
           push: true
-          target: test
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
