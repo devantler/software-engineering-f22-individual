@@ -39,7 +39,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+      - name: Test
+        run: |
+          docker build --target test SemesterProject/RaspberryPi/OrchestratorService/   
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -47,5 +49,6 @@ jobs:
           file: SemesterProject/RaspberryPi/OrchestratorService/Dockerfile
           platforms: linux/arm64
           push: true
+          target: test
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
