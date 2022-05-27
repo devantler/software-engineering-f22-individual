@@ -143,7 +143,7 @@ class UppaalGenerator {
 				<system>
 					system MasterController, «FOR disc : discs»«disc.name», «disc.name»_DiscSlot, «disc.name»_GetemptySlot, «FOR value: discSlotStateValues»«disc.name»_SlotVariable_«value», «disc.name»_Get«value»Slot,«ENDFOR»«ENDFOR» «FOR crane : cranes»«crane.name»,«crane.name»_CraneMagnet,«ENDFOR» «FOR camera : cameras»«camera.name»,«ENDFOR» EmergencyButton;
 				</system>
-				«UppaalQueryGenerator.generateUpaalQuery(cranes.toList(), discs.toList(), cameras.toList())»
+				«UppaalQueryGenerator.generateUpaalQuery(cranes.toList(), discs.toList(), cameras.toList(), model.uppaalQueries)»
 			'''
 		)
 	}

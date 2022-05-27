@@ -4,7 +4,8 @@ This repo contains everything from our main repository, which is related to the 
 
 ## List of Changes
 
-- Updated workflow for orchestrator service.
+- Updated workflow for orchestrator service to include running unit tests.
+- Updated program.fl
 
 ### General Grammar
 
