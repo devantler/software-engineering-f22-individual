@@ -30,44 +30,48 @@ class ProgramGenerator {
 
 	def static generate(IFileSystemAccess2 fsa, String name, List<Device> devices, List<Statement> statements) {
 		fsa.generateFile(
-			'''«name»/Program.cs''',
+			'''«name»/src/«name»/Program.cs''',
 			'''
-				using System;
 				using Entities;
 				using Mqtt;
 				
-				«generateVariables»
+				namespace «name»;
 				
-				«generateMainLoop»
-				
-				«generateSetupMethod(devices)»
-				
-				«generateRunMethod(devices, statements)»
+				public class Program
+				{
+					«generateVariables»
+					
+					«generateMainLoop»
+					
+					«generateSetupMethod(devices)»
+					
+					«generateRunMethod(devices, statements)»
+				}
 			'''
 		)
 	}
 
 	protected def static CharSequence generateVariables() '''
-		#region Variables
-		IMqttService mqtt = new MqttService();
+		public IMqttService mqtt = new MqttService();
 		
-		Dictionary<string, Crane> cranes = new();
-		Dictionary<string, Disk> disks = new();
-		Dictionary<string, Camera> cameras = new();
+		public Dictionary<string, Crane> cranes = new();
+		public Dictionary<string, Disk> disks = new();
+		public Dictionary<string, Camera> cameras = new();
 		
-		bool running = true;
-		#endregion
+		const bool running = true;
 	'''
 
 	protected def static CharSequence generateMainLoop() '''
-		#region Main
-		Setup();
-		Run().GetAwaiter().GetResult();
-		#endregion
+		private static void Main()
+		{
+		    Program program = new();
+		    program.Setup();
+		    program.Run().GetAwaiter().GetResult();
+		}
 	'''
 
 	protected def static CharSequence generateSetupMethod(List<Device> devices) '''
-		void Setup()
+		public void Setup()
 		{
 			«generateCranes(devices.filter[it instanceof Crane].map[it as Crane].toList)»
 		
@@ -118,7 +122,7 @@ class ProgramGenerator {
 
 	protected def static CharSequence generateRunMethod(List<Device> devices, List<Statement> statements) {
 		'''
-			async Task Run()	
+			public async Task Run()	
 			{
 				«FOR crane : devices.filter[it instanceof Crane].map[it as Crane].toList»
 					var «crane.name» = cranes["«crane.name»"];
@@ -174,9 +178,8 @@ class ProgramGenerator {
 			VariableConditional: {
 				val variableName = statement.variable.name
 				val variableType = statement.variable.getClass()
-				val dotOrComparisonOperator = variableType == GlobalVariableImpl
-						? " " + EnumParser.parseComparisonOperator(statement.comparison_operator) + " "
-						: "."
+				val dotOrComparisonOperator = variableType == GlobalVariableImpl ? " " +
+						EnumParser.parseComparisonOperator(statement.comparison_operator) + " " : "."
 				val conditionalQuotationMark = variableType == GlobalVariableImpl ? '"' : ''
 				val variableValue = ValueParser.parseVariableValue(statement.variableValue, variableType)
 				'''

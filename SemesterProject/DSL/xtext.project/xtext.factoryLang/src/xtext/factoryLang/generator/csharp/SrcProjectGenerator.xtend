@@ -11,8 +11,8 @@ class SrcProjectGenerator {
 	def static generate(IFileSystemAccess2 fsa, Model model) {
 		val devices = model.configuration.devices.map[it]
 		val statements = model.statements
+		CsprojGenerator.generate(fsa, model.name, ProjectType.SrcProject)
 		ProgramGenerator.generate(fsa, model.name, devices, statements)
-		CsprojGenerator.generate(fsa, model.name)
 		MqttGenerator.generate(fsa, model.name)
 		EntityGenerator.generate(
 			fsa,

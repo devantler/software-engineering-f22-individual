@@ -21,7 +21,7 @@ class EntityGenerator {
 
 	def static generateCraneEntity(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'''«name»/Entities/Crane.cs''',
+			'''«name»/src/«name»/Entities/Crane.cs''',
 			'''
 				using Mqtt;
 				
@@ -107,7 +107,7 @@ class EntityGenerator {
 
 	protected def static void generateDiskEntity(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'''«name»/Entities/Disk.cs''',
+			'''«name»/src/«name»/Entities/Disk.cs''',
 			'''
 				using System;
 				using Mqtt;
@@ -315,7 +315,7 @@ class EntityGenerator {
 
 	def static generateCameraEntity(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'''«name»/Entities/Camera.cs''',
+			'''«name»/src/«name»/Entities/Camera.cs''',
 			'''
 				using Mqtt;
 				
@@ -364,7 +364,7 @@ class EntityGenerator {
 
 	def static generateSlotEntity(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'''«name»/Entities/Slot.cs''',
+			'''«name»/src/«name»/Entities/Slot.cs''',
 			'''
 				namespace Entities;
 				
@@ -420,7 +420,7 @@ class EntityGenerator {
 
 	def static generateSlotStateEnum(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'''«name»/Entities/SlotState.cs''',
+			'''«name»/src/«name»/Entities/SlotState.cs''',
 			'''
 				namespace Entities;
 				

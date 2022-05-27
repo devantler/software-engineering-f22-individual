@@ -4,18 +4,32 @@ This repo contains everything from our main repository, which is related to the 
 
 ## List of Changes
 
+### General Grammar
+
 - Added system initialization so the system has a name
-- Changed Model to have a Configuration instead of multiple
+- Changed Model to have a Configuration instead of multiple configurations
 - Changed Configuration to have a list of services and devices
+- Added title separators for configuration, logic, unit tests and Uppaal queries.
+
+### Services Grammar
+
 - Added Service grammar rule
   - Added Mqtt grammar rule
   - Added Database grammar rule
   - Added Address grammar rule
 - Changed Device grammar rule to include 'create' keyword
+- Added enum SERVICE_NAME to specify supported services.
+
+### Unit Tests Grammar
+
 - Added UnitTest grammar rule
   - Added HealthCheckUnitTest
+  - Added ConnectionUnitTest
   - Added DeviceInitializationUnitTest
   - Added RunWithoutFailureUnitTest
+
+### UPPAAL Queries Grammar
+
 - Added UppaalQuery grammar rule
   - Added AllPathsUppaalQuery
   - Added OnePathUppaalQuery
@@ -25,12 +39,22 @@ This repo contains everything from our main repository, which is related to the 
   - Added ImplyExpression
   - Added ValueExpression
   - Added DeviceState
-- Added enum SERVICE_NAME to specify supported services.
-- Added title separators for configuration, logic, unit tests and Uppaal queries.
+
+### C# Code generation
+
 - Code generated project title from system name for Orchestrator
-- Code generated system folder name from system name for UPPAAL Project
 - Moved all csharp code generation files to `xtext.factoryLang.generator.csharp`
-- Moved all UPPAAL code generation files to `xtext.factoryLang.generator.uppaal`
-- Added code generation to generate a csharp test project.
+- Changed code generation of C# src project so the program is testable.
+- Code-Generated solution file
+- Added code generation to generate a C# test project.
   - Code generated Unit Tests.
-  - Made changes to Dockerfiles to include Unit Tests.
+    - Implemented HealthCheckUnitTest
+    - Implemented ConnectionUnitTest
+    - Implemented DeviceInitializationUnitTest
+    - Implemented RunWithoutFailureUnitTest
+- Code-Generated Dockerfile that includes src and test projects.
+
+### UPPAAL Code Generation
+
+- Moved all UPPAAL code generation files to `xtext.factoryLang.generator.uppaal`
+- Code generated system folder name from system name for UPPAAL Project

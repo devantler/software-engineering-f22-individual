@@ -6,7 +6,9 @@ import org.eclipse.xtext.generator.IFileSystemAccess2
 class CSharpGenerator {
 
 	def static generate(IFileSystemAccess2 fsa, Model model) {
+		SolutionGenerator.generate(fsa, model)
 		SrcProjectGenerator.generate(fsa, model)
-		//TestProjectGenerator.generate(fsa, model)
+		TestProjectGenerator.generate(fsa, model)
+		DockerfileGenerator.generate(fsa, model)
 	}
 }
