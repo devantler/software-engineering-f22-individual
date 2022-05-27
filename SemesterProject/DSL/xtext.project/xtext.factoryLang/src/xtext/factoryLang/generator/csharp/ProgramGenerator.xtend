@@ -1,4 +1,4 @@
-package xtext.factoryLang.generator.subgenerators
+package xtext.factoryLang.generator.csharp
 
 import java.util.List
 import org.eclipse.xtext.generator.IFileSystemAccess2
@@ -28,44 +28,50 @@ import xtext.factoryLang.factoryLang.DiskWaitOperation
 
 class ProgramGenerator {
 
-	def static generate(IFileSystemAccess2 fsa, List<Device> devices, List<Statement> statements) {
+	def static generate(IFileSystemAccess2 fsa, String name, List<Device> devices, List<Statement> statements) {
 		fsa.generateFile(
-			'OrchestratorService/Program.cs',
+			'''«name»/src/«name»/Program.cs''',
 			'''
-				using System;
 				using Entities;
 				using Mqtt;
 				
-				«generateVariables»
+				namespace «name»;
 				
-				«generateMainLoop»
-				
-				«generateSetupMethod(devices)»
-				
-				«generateRunMethod(devices, statements)»
+				public class Program
+				{
+					«generateVariables»
+					
+					«generateMainLoop»
+					
+					«generateSetupMethod(devices)»
+					
+					«generateRunMethod(devices, statements)»
+				}
 			'''
 		)
 	}
 
 	protected def static CharSequence generateVariables() '''
-		#region Variables
-		IMqttService mqtt = new MqttService();
+		public IMqttService mqtt = new MqttService();
 		
-		Dictionary<string, Crane> cranes = new();
-		Dictionary<string, Disk> disks = new();
-		Dictionary<string, Camera> cameras = new();
+		public Dictionary<string, Crane> cranes = new();
+		public Dictionary<string, Disk> disks = new();
+		public Dictionary<string, Camera> cameras = new();
 		
-		bool running = true;
-		#endregion
+		const bool running = true;
 	'''
+
 	protected def static CharSequence generateMainLoop() '''
-		#region Main
-		Setup();
-		Run().GetAwaiter().GetResult();
-		#endregion
+		private static void Main()
+		{
+		    Program program = new();
+		    program.Setup();
+		    program.Run().GetAwaiter().GetResult();
+		}
 	'''
+
 	protected def static CharSequence generateSetupMethod(List<Device> devices) '''
-		void Setup()
+		public void Setup()
 		{
 			«generateCranes(devices.filter[it instanceof Crane].map[it as Crane].toList)»
 		
@@ -74,6 +80,7 @@ class ProgramGenerator {
 			«generateCameras(devices.filter[it instanceof Camera].map[it as Camera].toList)»
 		}
 	'''
+
 	protected def static CharSequence generateCranes(List<Crane> cranes) '''
 		«IF cranes.size > 0» 
 			«FOR crane:cranes»
@@ -86,6 +93,7 @@ class ProgramGenerator {
 			«ENDFOR»
 		«ENDIF»
 	'''
+
 	protected def static CharSequence generateDisks(List<Disk> disks) '''
 		«IF disks.size > 0»
 			«FOR disk:disks»
@@ -98,6 +106,7 @@ class ProgramGenerator {
 			«ENDFOR»
 		«ENDIF»
 	'''
+
 	protected def static CharSequence generateCameras(List<Camera> cameras) '''
 		«IF cameras.size > 0»
 			«FOR camera:cameras»
@@ -110,9 +119,10 @@ class ProgramGenerator {
 			«ENDFOR»
 		«ENDIF»
 	'''
+
 	protected def static CharSequence generateRunMethod(List<Device> devices, List<Statement> statements) {
 		'''
-			async Task Run()	
+			public async Task Run()	
 			{
 				«FOR crane : devices.filter[it instanceof Crane].map[it as Crane].toList»
 					var «crane.name» = cranes["«crane.name»"];
@@ -133,6 +143,7 @@ class ProgramGenerator {
 			}
 		'''
 	}
+
 	protected def static CharSequence generateStatement(Statement statement) {
 		// remember scope for local variables
 		switch statement {
@@ -201,7 +212,7 @@ class ProgramGenerator {
 				val targetName = statement.target.name
 				val diskSlotValue = ValueParser.parseDiskSlotValue(statement.diskSlotValue, statement.getClass())
 				val quantity = statement.quantity
-				
+
 				'''
 					«IF quantity > 0»
 						Task.Run(async () =>

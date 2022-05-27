@@ -1,10 +1,14 @@
-name: Orchestrator Service V2
+name: Orchestrator Service V3
 
 on:
   push:
-    branches: ['main']
     paths:
-      - 'SemesterProject/RaspberryPi/OrchestratorService/**'
+    - 'SemesterProject/RaspberryPi/OrchestratorService/**'
+    branches:
+      - main
+    tags:
+      - 'v*'
+    
 
 jobs:
   build-and-push-image:
@@ -12,18 +16,36 @@ jobs:
     permissions:
       contents: read
       packages: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+              
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/devantler/orchestratorservice
+        
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push
-        run: |
-          docker buildx create --use
-          sh ./SemesterProject/RaspberryPi/OrchestratorService/build.sh
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: SemesterProject/RaspberryPi/OrchestratorService/
+          file: SemesterProject/RaspberryPi/OrchestratorService/Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

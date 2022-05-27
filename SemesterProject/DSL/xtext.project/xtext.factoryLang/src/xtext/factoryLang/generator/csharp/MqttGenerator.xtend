@@ -1,18 +1,18 @@
-package xtext.factoryLang.generator.subgenerators
+package xtext.factoryLang.generator.csharp
 
 import org.eclipse.xtext.generator.IFileSystemAccess2
 
 class MqttGenerator {
 
-	def static generate(IFileSystemAccess2 fsa) {
-		generateMqttTopics(fsa)
-		generateIMqttService(fsa)
-		generateMqttService(fsa)
+	def static generate(IFileSystemAccess2 fsa, String name) {
+		generateMqttTopics(fsa, name)
+		generateIMqttService(fsa, name)
+		generateMqttService(fsa, name)
 	}
 
-	protected def static void generateMqttService(IFileSystemAccess2 fsa) {
+	protected def static void generateMqttService(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'OrchestratorService/Mqtt/MqttService.cs',
+			'''«name»/src/«name»/Mqtt/MqttService.cs''',
 			'''
 				using System.Text;
 				using MQTTnet;
@@ -26,15 +26,17 @@ class MqttGenerator {
 				{
 				    public class MqttService : IMqttService
 				    {
-				        private const string ClientId = "OrchestratorService";
-				        private const string Ip = "192.168.10.1";
-				        private const int Port = 1883;
+				        private const string ClientId = "«name»";
+						private readonly string Ip;
+						private readonly int Port;
 				
-				        private readonly IManagedMqttClient _mqttClient;
+				        public readonly IManagedMqttClient _mqttClient;
 				        private readonly Dictionary<string, string> messages = new();
 				
-				        public MqttService()
+				        public MqttService(string ip = "192.168.10.1", int port = 1883)
 				        {
+							Ip = ip;
+							Port = port;
 				            MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
 				                .WithClientId(ClientId)
 				                .WithTcpServer(Ip, Port);
@@ -118,9 +120,9 @@ class MqttGenerator {
 		)
 	}
 
-	protected def static void generateIMqttService(IFileSystemAccess2 fsa) {
+	protected def static void generateIMqttService(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'OrchestratorService/Mqtt/IMqttService.cs',
+			'''«name»/src/«name»/Mqtt/IMqttService.cs''',
 			'''
 				namespace Mqtt
 				{
@@ -134,9 +136,9 @@ class MqttGenerator {
 		)
 	}
 
-	protected def static void generateMqttTopics(IFileSystemAccess2 fsa) {
+	protected def static void generateMqttTopics(IFileSystemAccess2 fsa, String name) {
 		fsa.generateFile(
-			'OrchestratorService/Mqtt/MqttTopics.cs',
+			'''«name»/src/«name»/Mqtt/MqttTopics.cs''',
 			'''
 				namespace Mqtt
 				{

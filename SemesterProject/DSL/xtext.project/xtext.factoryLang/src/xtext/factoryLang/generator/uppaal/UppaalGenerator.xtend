@@ -1,4 +1,4 @@
-package xtext.factoryLang.generator.subgenerators
+package xtext.factoryLang.generator.uppaal
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -24,7 +24,7 @@ class UppaalGenerator {
 	public static List<Statement> statementsIndexer;
 	static Map<String, String> locationIds = new HashMap();
 
-	def static generate(IFileSystemAccess2 fsa, Resource resource) {
+	def static generate(IFileSystemAccess2 fsa, String name, Resource resource) {
 		val model = resource.allContents.filter(Model).next
 		val discs = model.configuration.devices.map[it].filter[it instanceof Disk].map[x|x as Disk]
 		val cranes = model.configuration.devices.map[it].filter[it instanceof Crane].map[x|x as Crane]
@@ -32,7 +32,7 @@ class UppaalGenerator {
 		val discSlotStateValues = resource.allContents.filter(DiskSlotStateValue).map[value].toSet.map[toString]
 		UppaalGenerator.statementsIndexer = getStatements(model.statements)
 		fsa.generateFile(
-			"uppaal/system.xml",
+			'''«name»-UPPAAL/project.xml''',
 			'''
 				<?xml version="1.0" encoding="utf-8"?>
 				<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>

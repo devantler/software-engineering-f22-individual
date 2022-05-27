@@ -145,29 +145,32 @@ ForEach returns Loop:
 
 // ----- UnitTests ----- //
 UnitTest:
-	HealthCheckUnitTest | DeviceInitializationUnitTest | RunWithoutFailureUnitTest;
+	HealthCheckUnitTest | ConnectionUnitTest | DeviceInitializationUnitTest | RunWithoutFailureUnitTest;
 
 HealthCheckUnitTest returns UnitTest:
-	'test' address=[Service] 'health' 'status' 'is' status=STATUS;
+	{HealthCheckUnitTest} 'test' service=[Service] 'and' 'assert' 'health status' 'is' status=STATUS;
+
+ConnectionUnitTest returns UnitTest:
+	{ConnectionUnitTest} 'test' service=[Service] 'and' 'assert' 'connection' 'is' status=STATUS;
 
 DeviceInitializationUnitTest returns UnitTest:
-	'test' devices+=[Device] (',' devices+=[Device])* 'is' 'initialized';
+	{DeviceInitializationUnitTest} 'test' devices+=[Device] (',' devices+=[Device])* 'and' 'assert' ('device' | 'devices') ('is' | 'are') 'initialized';
 
 RunWithoutFailureUnitTest returns UnitTest:
-	'test' application=[Model] 'runs' 'without' 'failure';
+	{RunWithoutFailureUnitTest} 'test' application=[Model] 'and' 'assert' 'it' 'runs';
 
 // ----- UppaalQueries ----- //
 UppaalQuery:
 	AllPathsUppaalQuery | OnePathUppaalQuery | LeadsToUppaalQuery;
 
 AllPathsUppaalQuery:
-	'query' 'that' ('forever' | 'eventually') 'on' 'all' 'paths' expression=Expression;
+	{AllPathsUppaalQuery} 'query' 'that' ('forever' | 'eventually') 'on' 'all' 'paths' expression=Expression;
 
 OnePathUppaalQuery:
-	'query' 'that' ('forever' | 'eventually') 'on' 'one' 'path' expression=Expression;
+	{OnePathUppaalQuery} 'query' 'that' ('forever' | 'eventually') 'on' 'one' 'path' expression=Expression;
 
 LeadsToUppaalQuery:
-	'query' 'that' '(' BEGIN stateOne=ValueExpression 'leads' 'to' stateTwo=ValueExpression END ')';
+	{LeadsToUppaalQuery} 'query' 'that' '(' BEGIN stateOne=ValueExpression 'leads' 'to' stateTwo=ValueExpression END ')';
 
 Expression:
 	'(' BEGIN expression=AndOrExpression END ')';
