@@ -1,2 +1,26 @@
 \subsection{Solution Approach}
-Describe the solution approach on a high-level including advantages and drawbacks based on relevant literature.
+
+The solution to the problem is to (1) support defining Unit Tests and UPPAAL Queries in the \acrshort{dsl}. (2) Code-generate Unit Tests to the Orchestrator, and code-generate UPPAAL Queries to the UPPAAL Project. (3) Ensure Unit Tests are run as part of the deployment pipeline.\\
+
+The solution disregards the system's inability to auto-pull and start docker images on the Raspberry Pi, as the Pi is no longer available. A simple solution for this could have been to add a crontab job to pull the latest image from GitHub Packages and restart the Docker container. A more robust solution would be to use a Container Orchestrator to manage the Docker containers e.g. Docker Swarm, Nomad HashiCorp, or Kubernetes.\\
+
+The solution also disregards the system being a local system. Connecting to services remotely is impossible when the services are not open to the public. A workaround is to use alternative remote services to communicate with the Orchestrator during the deployment pipeline.\\
+
+\subsubsection{Advantages and Disadvantages}
+The solution provides a set of advantages to the system:
+
+\begin{itemize}
+    \item Making the system testable by end-users.
+    \item Making model-checking for future issues and requirements possible.
+    \item Ensuring the correctness of the Orchestrator before deployment.
+    \item Ensuring remote services are available.
+    \item Ensuring connectivity to remote service is possible.
+\end{itemize}
+
+However, it still has a number of disadvantages:
+
+\begin{itemize}
+    \item Health checks in Unit Tests only ensure service is available at one given time.
+    \item Defining Unit Tests in the \acrshort{dsl} is limited by scope.
+    \item Defining UPPAAL Queries in the \acrshort{dsl} is limited by scope.
+\end{itemize}
