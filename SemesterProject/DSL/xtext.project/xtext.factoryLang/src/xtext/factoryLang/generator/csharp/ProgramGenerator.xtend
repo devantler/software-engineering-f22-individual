@@ -58,7 +58,7 @@ class ProgramGenerator {
 		public Dictionary<string, Disk> disks = new();
 		public Dictionary<string, Camera> cameras = new();
 		
-		const bool running = true;
+		public bool running;
 	'''
 
 	protected def static CharSequence generateMainLoop() '''
@@ -133,7 +133,9 @@ class ProgramGenerator {
 				«FOR camera : devices.filter[it instanceof Camera].map[it as Camera].toList»
 					var «camera.name» = cameras["«camera.name»"];
 				«ENDFOR»
-			
+				
+				running = true;
+				
 				while (running)
 				{
 					«FOR statement : statements»
@@ -178,8 +180,9 @@ class ProgramGenerator {
 			VariableConditional: {
 				val variableName = statement.variable.name
 				val variableType = statement.variable.getClass()
-				val dotOrComparisonOperator = variableType == GlobalVariableImpl ? " " +
-						EnumParser.parseComparisonOperator(statement.comparison_operator) + " " : "."
+				val dotOrComparisonOperator = variableType == GlobalVariableImpl
+						? " " + EnumParser.parseComparisonOperator(statement.comparison_operator) + " "
+						: "."
 				val conditionalQuotationMark = variableType == GlobalVariableImpl ? '"' : ''
 				val variableValue = ValueParser.parseVariableValue(statement.variableValue, variableType)
 				'''

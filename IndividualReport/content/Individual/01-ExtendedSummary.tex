@@ -1,18 +1,23 @@
 \subsection*{Extended Summary}
 
-This extension of the group report describes the features implemented by Nikolai Emil Damm, during the two weeks after the hand in of the group report. The features are as follows:
+The extended features to the system touch upon the following aspects of \acrshort{sm-iot}, \acrshort{msd}, \acrshort{ssav}:
 
-\begin{itemize}
-    \item Added Unit Tests to the \acrshort{dsl} and implemented code-generation of Unit Tests in C\# to test the functionality of the Orchestrator.
-    \item Added UPPAAL Queries to the \acrshort{dsl} and implemented code-generation of UPPAAL Queries to the UPPAAL XML project file format.
-    \item Extended the deployment pipeline to run Unit Tests before deploying the Orchestrator.
-\end{itemize}
-
-\noindent The features touch upon the following aspects of \acrshort{sm-iot}, \acrshort{msd}, \acrshort{ssav}:
-
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
     \item \acrshort{sm-iot}: Health Monitoring of services, connectivity, safe deployment of services, auto-deployment of services.
-    \item \acrshort{msd}: Xtext, XTend, Extended Grammar, Code-generation to multiple targets, left-factoring.  
+    \item \acrshort{msd}: Xtext, Xtend, Extended Grammar, Code-generation to multiple targets, left-factoring.  
     \item \acrshort{ssav}: UPPAAL Queries with support for $A[]$, $A<>$, $E[]$, $E<>$, leads to ($\rightarrow$) negation ($!$), conjunction (and/or), and imply.
 \end{itemize}
 
+\subsection*{Additional materials}
+
+A video demonstrating the new features is available as an attachment to the project handin. The video demonstrates the new features in the following order:
+
+\begin{itemize}[leftmargin=*]
+    \item Showing the updated Grammar for the DSL. (See \refappendix{appendix:grammar-language-updated})
+    \item Showing the DSL in action; how to define a new service, create a Unit Test, or create a UPPAAL Query. (See \refappendix{appendix:fl-updated})
+    \item Showing the new code generated Orchestrator. (See the GitHub repository)
+    \item Showing the code generated queries in the UPPAAL project.
+    \item Show the deployment pipeline, and how  unit tests are executed as part of it.
+\end{itemize}
+
+All the source code is available from the forked GitHub repository \href{https://github.com/devantler/software-engineering-f22-individual}{https://github.com/devantler/software-engineering-f22-individual}.

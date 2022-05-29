@@ -11,7 +11,7 @@ public class Program
 	public Dictionary<string, Disk> disks = new();
 	public Dictionary<string, Camera> cameras = new();
 	
-	const bool running = true;
+	public bool running;
 	
 	private static void Main()
 	{
@@ -50,7 +50,7 @@ public class Program
 		var crane1 = cranes["crane1"];
 		var disk1 = disks["disk1"];
 		var camera1 = cameras["camera1"];
-	
+		running = true;
 		while (running)
 		{
 			foreach (var diskSlot in disk1.GetSlotsWithMark(SlotState.Complete))

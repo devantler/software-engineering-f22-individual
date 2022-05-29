@@ -67,8 +67,18 @@ public class UnitTests
 	[Fact]
 	public void RunWithoutFailureUnitTest()
 	{
-		Program program = new();
-		program.Setup();
-		Assert.True(program.Run().IsCompletedSuccessfully);
+        Program program = new()
+        {
+            mqtt = new MqttService("test.mosquitto.org", 1883)
+        };
+        program.Setup();
+		var task = Task.Run(() => program.Run());
+		while(!program.running)
+        {
+			Thread.Sleep(1000);
+		}
+		Thread.Sleep(5000);
+		Assert.True(program.running);
+		Assert.True(!task.IsFaulted);
 	}
 }

@@ -1,10 +1,10 @@
 \subsection{Problem Description}
 
-The final system developed for the group project (from now on the old system) is not testable to the degree that is needed to ensure that updates or deployments of services will not cause the system to malfunction.\\
+The final system developed for the group project (from now on the old system) is not testable to the degree that is needed to ensure the system runs as expected and that updates or deployments of services will not cause the system to malfunction.\\
 
 In particular, the correctness of the Orchestrator is critical to maintaining the safety and reliability of the overall system. As such it must perform well. Additionally, it is important that the Orchestrator can communicate with the MQTT Broker, as the IoT devices are remotely controlled by the Orchestrator and messages on MQTT topics. If communication is not possible the system would be idle. 
 
-Adding support for Unit Tests in the \acrshort{dsl} would allow testing of the Orchestrator's correctness, the health of services, and that no connectivity issues occur.\\
+Adding support for Unit Tests in the \acrshort{dsl} would allow testing of the Orchestrator's correctness and behaviour. In particular, it can also allow testing of the health of required services, and that no connectivity issues occur when connecting to them.\\
 
 Model-checking the system is also of importance. The old system does not support UPPAAL queries in the \acrshort{dsl}, and as such, it is not possible to dynamically model-check the system. Supporting queries in the \acrshort{dsl} future-proofs the code-generated UPPAAL projects, and allows model-checking for issues and requirements that may arise in the future.\\
 
