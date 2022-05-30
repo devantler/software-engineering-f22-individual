@@ -1,2 +1,28 @@
 \subsection{Solution Approach}
-Describe the solution approach on a high-level including advantages and drawbacks based on relevant literature.
+
+A solution to the problem is to (1) support defining Unit Tests and UPPAAL Queries in the \acrshort{dsl}. (2) Code-generate Unit Tests to the Orchestrator, and code-generate UPPAAL Queries to the UPPAAL Project. (3) Ensure Unit Tests run as part of the deployment pipeline.\\
+
+The solution disregards the system's inability to auto-pull and start docker images on the Raspberry Pi, as the Pi is no longer available. A simple solution for this could have been to add a crontab job \cite{crontab} to pull the latest image from GitHub Packages and restart the Docker container. A more robust solution would be to use a Container Orchestrator to manage the Docker containers e.g. Docker Swarm \cite{docker-swarm}, Nomad HashiCorp \cite{hashicorp-nomad}, or Kubernetes \cite{kubernetes}. All of these include ways to implement stable CI/CD workflows.\\
+
+The solution also disregards the system being a local system. Connecting to services remotely is impossible when the services are not open to the public. A workaround is to use alternative remote services to communicate with the Orchestrator during the deployment pipeline. However, a more adept system could very well have all required services available with authentication and authorization, so the issue can reasonably be assumed to be a non-issue if the system was developed further.\\
+
+\newpage
+\subsubsection{Advantages and Disadvantages}
+The solution provides a set of advantages to the system:
+
+\begin{itemize}
+    \item [$+$] Making the system testable by end-users.
+    \item [$+$] Making model-checking for future issues and requirements possible.
+    \item [$+$] Ensuring the correctness of the Orchestrator before deployment.
+    \item [$+$] Ensuring remote services are available.
+    \item [$+$] Ensuring connectivity to remote services is possible.
+\end{itemize}
+
+However, it still has several disadvantages:
+
+\begin{itemize}
+    \item [\%] Health checks in Unit Tests cannot monitor or alert of service availability in real time.
+    \item [\%] Testing the actual system environment is not possible, as services are not publicly available.
+    \item [\%] Defining Unit Tests in the \acrshort{dsl} is limited by scope.
+    \item [\%] Defining UPPAAL Queries in the \acrshort{dsl} is limited by scope.
+\end{itemize}

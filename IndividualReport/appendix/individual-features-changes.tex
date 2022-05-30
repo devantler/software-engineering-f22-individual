@@ -1,0 +1,160 @@
+\section{Individual Features - List of Changes}\label{appendix:individual-feature-list-of-changes}
+
+\hypertarget{general}{%
+\subsection{General}\label{general}}
+
+\begin{itemize}
+\item
+  Updated workflow for orchestrator service to include running unit
+  tests.
+\item
+  Updated program.fl
+\end{itemize}
+
+\hypertarget{general-grammar}{%
+\subsection{General Grammar}\label{general-grammar}}
+
+\begin{itemize}
+
+\item
+  Added system initialization so the system has a name
+\item
+  Changed Model to have a Configuration instead of multiple
+  configurations
+\item
+  Changed Configuration to have a list of services and devices
+\item
+  Added title separators for configuration, logic, unit tests and Uppaal
+  queries.
+\end{itemize}
+
+\hypertarget{services-grammar}{%
+\subsection{Services Grammar}\label{services-grammar}}
+
+\begin{itemize}
+\item
+  Added Service grammar rule
+
+  \begin{itemize}
+  \item
+    Added Mqtt grammar rule
+  \item
+    Added Database grammar rule
+  \item
+    Added Address grammar rule
+  \end{itemize}
+\item
+  Changed Device grammar rule to include `create' keyword
+\item
+  Added enum SERVICE\_NAME to specify supported services.
+\end{itemize}
+
+\hypertarget{unit-tests-grammar}{%
+\subsection{Unit Tests Grammar}\label{unit-tests-grammar}}
+
+\begin{itemize}
+\item
+  Added UnitTest grammar rule
+
+  \begin{itemize}
+  \item
+    Added HealthCheckUnitTest
+  \item
+    Added ConnectionUnitTest
+  \item
+    Added DeviceInitializationUnitTest
+  \item
+    Added RunWithoutFailureUnitTest
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{uppaal-queries-grammar}{%
+\subsection{UPPAAL Queries Grammar}\label{uppaal-queries-grammar}}
+
+\begin{itemize}
+\item
+  Added UppaalQuery grammar rule
+
+  \begin{itemize}
+  \item
+    Added AllPathsUppaalQuery
+  \item
+    Added OnePathUppaalQuery
+  \item
+    Added LeadsToUppaalQuery
+  \end{itemize}
+\item
+  Added Expression grammar rule with left-factoring
+
+  \begin{itemize}
+  \item
+    Added AddOrExpression
+  \item
+    Added ImplyExpression
+  \item
+    Added ValueExpression
+  \item
+    Added DeviceState
+  \item
+    Added Negation
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{c-code-generation}{%
+\subsection{C\# Code generation}\label{c-code-generation}}
+
+\begin{itemize}
+\item
+  Code generated project title from system name for Orchestrator
+\item
+  Moved all csharp code generation files to
+  \texttt{xtext.factoryLang.generator.csharp}
+\item
+  Changed code generation of C\# src project so the program is testable.
+\item
+  Code-Generated solution file
+\item
+  Added code generation to generate a C\# test project.
+
+  \begin{itemize}
+  \item
+    Code generated Unit Tests.
+
+    \begin{itemize}
+    \item
+      Implemented HealthCheckUnitTest
+    \item
+      Implemented ConnectionUnitTest
+    \item
+      Implemented DeviceInitializationUnitTest
+    \item
+      Implemented RunWithoutFailureUnitTest
+    \end{itemize}
+  \end{itemize}
+\item
+  Code-Generated Dockerfile that includes src and test projects.
+\end{itemize}
+
+\hypertarget{uppaal-code-generation}{%
+\subsection{UPPAAL Code Generation}\label{uppaal-code-generation}}
+
+\begin{itemize}
+\item
+  Moved all UPPAAL code generation files to
+  \texttt{xtext.factoryLang.generator.uppaal}
+\item
+  Code generated system folder name from system name for UPPAAL Project
+\item
+  Code generated Queries
+
+  \begin{itemize}
+  \item
+    Implemented AllPathsUppaalQuery
+  \item
+    Implemented OnePathUppaalQuery
+  \item
+    Implemented LeadsToUppaalQuery
+  \item
+    Implemented Negation
+  \end{itemize}
+\end{itemize}

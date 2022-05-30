@@ -1,0 +1,46 @@
+@startuml
+object Model
+
+object Configuration
+object Device
+object Service
+
+object Statement
+
+object UnitTest
+object HealthCheckUnitTest
+object ConnectionUnitTest
+object DeviceInitializationUnitTest
+object RunWithoutFailureUnitTest
+
+object UppaalQuery
+object AllPathsUppaalQuery
+object OnePathUppaalQuery
+object LeadsToUppaalQuery
+object Expression
+object AndOrExpression
+object ImplyExpression
+object ValueExpression
+
+Model --> Configuration
+Model --> Statement
+Model -> UnitTest
+Model -up--> UppaalQuery
+
+Configuration --> Device
+Configuration --> Service
+
+UnitTest <|-- HealthCheckUnitTest
+UnitTest <|-up- ConnectionUnitTest
+UnitTest <|-- DeviceInitializationUnitTest
+UnitTest <|- RunWithoutFailureUnitTest
+
+UppaalQuery <|-left- AllPathsUppaalQuery
+UppaalQuery <|-up- OnePathUppaalQuery
+UppaalQuery <|-up- LeadsToUppaalQuery
+UppaalQuery -> Expression
+
+Expression <|-- AndOrExpression
+Expression <|- ImplyExpression
+Expression <|-up- ValueExpression
+@enduml

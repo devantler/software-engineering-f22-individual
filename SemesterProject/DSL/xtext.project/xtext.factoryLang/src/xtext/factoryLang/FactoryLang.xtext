@@ -4,24 +4,23 @@ generate factoryLang "http://www.factoryLang.xtext/FactoryLang"
 
 Model:
 	'init' 'system' 'named' name=ID
-	'CONFIGURATION:'
+	'Configuration' ':'
 	BEGIN
 	configuration=Configuration
 	END
-	'LOGIC:'
+	'Logic' ':'
 	BEGIN
 	statements+=Statement*
 	END
-	'UNIT TESTS:'
+	('Unit Tests' ':'
 	BEGIN
 	unitTests+=UnitTest*
-	END
-	'UPPAAL QUERIES:'
+	END)?
+	('Uppaal Queries' ':'
 	BEGIN
 	uppaalQueries+=UppaalQuery*
-	END;
+	END)?;
 
-// uppaalQueries+=UppaalQuery+;
 // ----- CONFIGURATION ----- //
 Configuration:
 	{Configuration} services+=Service* devices+=Device*;
@@ -164,15 +163,15 @@ RunWithoutFailureUnitTest returns UnitTest:
 UppaalQuery:
 	AllPathsUppaalQuery | OnePathUppaalQuery | LeadsToUppaalQuery;
 
-AllPathsUppaalQuery:
+AllPathsUppaalQuery returns UppaalQuery:
 	{AllPathsUppaalQuery} 'query' 'that' property=('forever' | 'eventually') 'on' 'all' 'paths' '(' BEGIN not=('not')?
 	expression=AndOrExpression END ')';
 
-OnePathUppaalQuery:
+OnePathUppaalQuery returns UppaalQuery:
 	{OnePathUppaalQuery} 'query' 'that' property=('forever' | 'eventually') 'on' 'one' 'path' '(' BEGIN not=('not')?
 	expression=AndOrExpression END ')';
 
-LeadsToUppaalQuery:
+LeadsToUppaalQuery returns UppaalQuery:
 	{LeadsToUppaalQuery} 'query' 'that' '(' BEGIN not1=('not')? stateOne=ValueExpression 'leads' 'to' not2=('not')?
 	stateTwo=ValueExpression END ')';
 

@@ -33,17 +33,6 @@ public class UnitTests
 	}
 	
 	[Fact]
-	public void InfluxdbHealthCheckUnitTest()
-	{
-		try {
-			using var client = new TcpClient("influxdb.devantler.com", 8086);
-			Assert.True(!client.Connected, "Influxdb service is available");
-		} catch (Exception) {
-			Assert.False(true);
-		}
-	}
-	
-	[Fact]
 	public void DeviceInitializationUnitTest()
 	{
 		Program program = new();
@@ -67,8 +56,18 @@ public class UnitTests
 	[Fact]
 	public void RunWithoutFailureUnitTest()
 	{
-		Program program = new();
+		Program program = new()
+		{
+			mqtt = new MqttService("test.mosquitto.org", 1883)
+		};
 		program.Setup();
-		Assert.True(program.Run().IsCompletedSuccessfully);
+		var task = Task.Run(() => program.Run());
+		while(!program.running)
+		{
+			Thread.Sleep(1000);
+		}
+		Thread.Sleep(5000);
+		Assert.True(program.running);
+		Assert.True(!task.IsFaulted);
 	}
 }

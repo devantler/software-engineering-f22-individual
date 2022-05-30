@@ -11,7 +11,7 @@ public class Program
 	public Dictionary<string, Disk> disks = new();
 	public Dictionary<string, Camera> cameras = new();
 	
-	const bool running = true;
+	public bool running;
 	
 	private static void Main()
 	{
@@ -30,7 +30,7 @@ public class Program
 			{"outBlue", 70}
 		}, mqtt));
 	
-		disks.Add("disk1", new Disk("disk1", 8, new Dictionary<string, int>()
+		disks.Add("disk1", new Disk("disk1", 4, new Dictionary<string, int>()
 		{
 			{"craneZone", 1},
 			{"cameraZone", 2},
@@ -50,7 +50,9 @@ public class Program
 		var crane1 = cranes["crane1"];
 		var disk1 = disks["disk1"];
 		var camera1 = cameras["camera1"];
-	
+		
+		running = true;
+		
 		while (running)
 		{
 			foreach (var diskSlot in disk1.GetSlotsWithMark(SlotState.Complete))

@@ -1,2 +1,94 @@
-\subsection{Solution Description and Results}
-Describe the solution, test, and evaluation results (note: remember to refer to what the video covers).
+\subsection{Solution Description}
+
+The solution consists of a long set of changes to the \acrshort{dsl}, code-generation of the Orchestrator and UPPAAL Project, the deployment pipeline, and some quality of life changes. All changes made are documented in \refappendix{appendix:individual-feature-list-of-changes} and an overview of the updated DSL is provided in \refappendix{appendix:factory-lang-updated}.
+
+In the following sections, each part of the solution is described in detail.
+
+\subsubsection{Unit Tests}
+
+Adding Unit Tests to the \acrshort{dsl} required extending the grammar, implementing code generation of the Unit Tests, and making Unit Tests runnable from the deployment pipeline. 
+
+Adding Unit Tests to the Grammar was simple, as it is a simple extension of the existing grammar. Unit Tests are added as a list in the model rule, such that they must be defined after the logic, and such that multiple Unit Tests can be defined. Unit Tests have a total of 5 grammar rules (See \refappendix{appendix:grammar-language-updated}):
+
+\begin{itemize}
+    \item UnitTest - A rule to contain the different possible Unit Tests.
+    \item HealthCheckUnitTest - A rule to parse health check unit tests. 
+    \item ConnectionUnitTest - A rule to parse connection unit tests.
+    \item DeviceInitializationUnitTest - A rule to parse device initialization unit tests.
+    \item RunWithoutFailureUnitTest - A rule to parse run without failure unit tests.
+\end{itemize}
+
+The grammar rules for Unit Tests form a hierarchy as all Unit Tests are subclasses of the UnitTest rule. The hierarchy is depicted in the updated metamodel presented in \refappendix{appendix:metamodel-updated}.\\
+
+Besides the Unit Tests, a concept of services has been added to the Grammar, so any TCP service can be specified and used by Unit Tests. Services consist of two rules, the Service rule and the Address rule. The latter enables identifiers with dots, such that it is possible to provide domain addresses or IP addresses. 
+
+To support services, configurations have been changed to an object containing the previous configurations and services, such that services can be defined along with configurations.\\
+
+
+
+Adding Unit Tests to the Code Generation was a bit more involved, as it required larger changes to the Orchestrator. The Orchestrator's \mintinline{csharp}{Program.cs} class had to be rewritten to contain the code in a public class with callable methods (See \refappendix{appendix:orchestrator-updated-programcs}). Furthermore, a C\# solution had to be code-generated, which includes restructuring paths and generating a solution file (.sln file), and a new test project. This was necessary to follow best practices for unit testing in C\# \cite{dotnet-project-structure}, and to dockerize multiple projects as a single unit. Lastly, a Dockerfile \refappendix{appendix:orchestrator-updated-dockerfile} had to be code-generated as well to enable the unit tests to be run on the deployment pipeline. 
+
+The generated project is visible in the attached repository in \code{SemesterProject/RaspberryPi/OrchestratorService}.\\
+
+The full implementation of Unit Tests is extendible, as adding a new Unit Test is a matter of adding a new rule to the hierarchy and adding cases to handle the code generation for the new rule.
+
+\subsubsection*{Testing correctness of the Orchestrator}
+
+To test the correctness of the orchestrator two tests have been implemented. 
+
+\begin{itemize}
+    \item \code{DeviceInitializationUnitTest} tests whether the expected devices are initialized in the code-generated Orchestrator.
+    \item \code{RunWithoutFailureUnitTest} tests whether the Orchestrator can execute its main operations without failure, by utilizing a test MQTT service.
+\end{itemize}
+
+Testing whether the run method runs without failure is not flawless. The logic of the Orchestrator includes awaiting messages on MQTT topics to indicate a device is ready or a device has completed a task. As the test runs in a test environment with no devices, the Run method will end up in an infinite loop waiting for said messages. As such the test disregards that the method must run to completion, and instead tests that the method is properly executed and that it is running without failure after 10 seconds.
+
+\subsubsection*{Testing connectivity of the Orchestrator}
+
+To test the connectivity of the Orchestrator, two health checks and an MQTT connection test are generated. 
+
+\begin{itemize}
+    \item \code{MqttHealthCheckUnitTest} pings a public test MQTT broker given an IP address and a port.
+    \item \code{MqttConnectionUnitTest} tests if an MQTT client can successfully connect to a specified MQTT broker.
+    \item \code{InfluxdbHealthCheckUnitTest} pings a non existing InfluxDB server given an IP address and a port (to show that it works with any service).
+\end{itemize}
+
+The choice of implementing Health Checks as Unit Tests is a bit awkward, as health checks normally ping a service continuously to alert a user if the service becomes unavailable. However, being able to test that required services for the system is up just before deployment is helpful to ensure that the environment that the system is deployed to is correctly set up.
+
+\subsubsection*{Run unit tests in the deployment pipeline}
+
+Enabling running tests on the deployment pipeline, required adding a new GitHub Action, to run the tests, before publishing the image to GitHub Packages. The GitHub Action can be seen in \refappendix{appendix:orchestrator-updated-githubaction}. It is currently set up to stop the build of the docker image in case of failing Unit Tests. As such, no new image is provided, and a potential reconciliation process that pulls the image to the Raspberry Pi will not be triggered. In other words, if unit tests fail, deployment never happens. \cite{github-actions-docs}.
+
+\subsubsection{Adding Dynamic UPPAAL Queries}
+
+Adding Dynamic UPPAAL Queries to the \acrshort{dsl} required extending the grammar with left-factoring and adding code generation of the UPPAAL Queries.
+
+The queries are added as a list in the model rule, and are defined after Unit Tests. The queries consists of a total of 8 grammar rules (See \refappendix{appendix:grammar-language-updated}):
+
+\begin{itemize}
+    \item UppaalQuery - A rule to contain the different possible query rules.
+    \item AllPathsUppaalQuery - A rule to parse all paths queries ($A<>$ and $A[]$).
+    \item OnePathUppaalQuery - A rule to parse one path queries ($E<>$ and $E[]$).
+    \item LeadsToUppaalQuery - A rule to parse leads to queries ($\rightarrow$).
+    \item AndOrExpression - Left-factored expression to parse conjunction (and/or)
+    \item ImplyExpression - Left-factored expression to parse implication (imply)
+    \item ValueExpression - Left-factored expression to parse parenthesized expressions or DeviceState values.
+    \item DeviceState - A rule to parse references to locations in the UPPAAL project.
+\end{itemize}
+
+The metamodel for the new grammar rules is shown in \refappendix{appendix:metamodel-updated}.
+
+Support for negation is also added, such that any expression can be followed by the word 'not' to negate that expression.
+
+The implementation extends the previous grammar by being mostly written in natural language, however, it still requires users to know the concepts of UPPAAL. \cite{uppaal-docs}
+
+\subsubsection{Quality of Life Changes}
+
+During the development of the new features, some quality of life changes were made:
+
+\begin{itemize}
+    \item Require a system title.
+    \item Separate concepts in the DSL by UPPERCASE titles and indentation.
+\end{itemize}
+
+The changes enable users to code-generate projects with a dynamic title and help to make the DSL more readable, as it grows.
