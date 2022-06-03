@@ -6,34 +6,34 @@ import xtext.factoryLang.factoryLang.Model
 class DockerfileGenerator {
 	
 	def static generate(IFileSystemAccess2 fsa, Model model) {
-		fsa.generateFile('''«model.name»/Dockerfile''','''
+		fsa.generateFile('''ï¿½model.nameï¿½/Dockerfile''','''
 			FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 			WORKDIR /app
 			COPY *.sln .
-			COPY src/«model.name»/*.csproj ./src/«model.name»/
-			COPY test/«model.name».Tests/*.csproj ./test/«model.name».Tests/
+			COPY src/ï¿½model.nameï¿½/*.csproj ./src/ï¿½model.nameï¿½/
+			COPY test/ï¿½model.nameï¿½.Tests/*.csproj ./test/ï¿½model.nameï¿½.Tests/
 			RUN dotnet restore
 			
 			COPY . .
 			RUN dotnet build
 			
 			FROM build AS testrunner
-			WORKDIR /app/test/«model.name».Tests
+			WORKDIR /app/test/ï¿½model.nameï¿½.Tests
 			CMD ["dotnet", "test", "--logger:trx"]
 			
 			FROM build AS test
-			WORKDIR /app/test/«model.name».Tests
+			WORKDIR /app/test/ï¿½model.nameï¿½.Tests
 			RUN dotnet test --logger:trx
 			
 			FROM build AS publish
-			WORKDIR /app/src/«model.name»
+			WORKDIR /app/src/ï¿½model.nameï¿½
 			RUN dotnet publish -c Release -o out
 			
-			FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+			FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 			WORKDIR /app
-			COPY --from=publish /app/src/«model.name»/out ./
+			COPY --from=publish /app/src/ï¿½model.nameï¿½/out ./
 			EXPOSE 5000
-			ENTRYPOINT ["dotnet", "«model.name».dll"]
+			ENTRYPOINT ["dotnet", "ï¿½model.nameï¿½.dll"]
 		''')
 	}
 	
